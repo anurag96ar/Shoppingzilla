@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Login Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/admin-styles/vendors/feather/feather.css">
+  <link rel="stylesheet" href="/admin-styles/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="/admin-styles/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/admin-styles/css/vertical-layout-light/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="/admin-styles/images/favicon.png" />
+  <script>
+    window.history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
+    // Disable the back button
+  //  window.history.forward();
+ //   function disableBackButton() {
+     //   window.history.pushState(null, "", window.location.href);
+      //  window.onpopstate = function () {
+     //       window.history.forward();
+      //  };
+    //}
+  </script>
+</head>
+
+<body onload="disableBackButton()">
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+              <div class="brand-logo">
+                <img src="/admin-styles/images/logo.png" alt="logo">
+              </div>
+              <h4>Hello! let's get started</h4>
+              <h6 class="font-weight-light">Sign in to continue.</h6>
+              <form class="pt-3" method="POST" action="loginAdmin">
+
+                <div class="form-group">
+                  <input type="email" class="form-control form-control-lg" id="email" name="email" required
+                    placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control form-control-lg" id="password" name="password" required
+                    placeholder="Password" required>
+                </div>
+                <button class="mt-3 btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit">
+                  SIGN IN
+                </button>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="/admin-styles/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="/admin-styles/js/off-canvas.js"></script>
+  <script src="/admin-styles/js/hoverable-collapse.js"></script>
+  <script src="/admin-styles/js/template.js"></script>
+  <script src="/admin-styles/js/settings.js"></script>
+  <script src="/admin-styles/js/todolist.js"></script>
+  <!-- endinject -->
+</body>
+
+</html>

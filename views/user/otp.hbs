@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .otp-container {
+      max-width: 400px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .otp-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+.otp-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .otp-input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .otp-submit {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: none;
+      background-color: #4caf50;
+      color: #ffffff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .otp-submit:hover {
+      background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+     <div class="otp-container">
+    <h1 class="otp-title">Enter OTP</h1>
+    <h5>We have sent OTP to your e-mail ID:{{email}}</h5>
+    <form class="otp" action="/api/user/otp?email={{email}}" method="POST">
+      <input class="otp" type="otp" name="otp" placeholder="Enter the OTP" required>
+      <button class="otp-submit" type="submit">Verify OTP</button>
+    </form>
+  </div>
+</body>
+</html>
