@@ -41,7 +41,14 @@
 
           <div class="col-lg-12 text-center text-lg-right">
             <ul class="menu list-inline mb-0">
-              <li class="list-inline-item"><a href="loginPage">Register | Login</a></li>
+            {{#if isLoggedIn}}
+                   <div></div> 
+
+            {{else}}
+            <li class="list-inline-item"><a href="loginPage">Register | Login</a></li>
+           
+       
+            {{/if}}
               <li class="list-inline-item"><a href="contact">Contact</a></li>
 
             </ul>
@@ -143,11 +150,12 @@
 
             </li>
           </ul>
-          <div class="navbar-buttons d-flex justify-content-end">
+         {{#if isLoggedIn}}  
+           <div class="navbar-buttons d-flex justify-content-end">
             <!-- /.nav-collapse-->
             <div id="search-not-mobile" class="navbar-collapse collapse"></div>
             <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a href="cart"
-                class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span>items in cart</span></a>
+                class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span>items in cart ({{cartCount}})</span></a>
             </div>
             <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a href="wishlist"
                 class="btn btn-primary navbar-btn"><i class="fa fa-heart"></i><span>My Wishlist</span></a>
@@ -156,6 +164,8 @@
               </div>
             </div>
           </div>
+          {{else}}<div></div>
+          {{/if}}
         </div>
     </nav>
     <div id="search" class="collapse">
@@ -298,16 +308,14 @@
         <!-- /.col-lg-3-->
         <div class="col-lg-6 col-md-6">
           <h4 class="mb-3">Where to find us</h4>
-          <p><strong>ShoppingZilla Ltd.</strong><br>13/25 New Avenue<br>New Heaven<br>45Y
-            73J<br>England<br><strong>Great
-              Britain</strong></p><a href="contact">Go to contact page</a>
+          <p><strong>ShoppingZilla Ltd.</strong><br>Duo City<br>#40<br>45Y
+            73J<br>India<br><strong>Electronic City</strong></p><a href="contact">Go to contact page</a>
           <hr class="d-block d-md-none">
         </div>
         <!-- /.col-lg-3-->
         <div class="col-lg-6 col-md-6">
           <h4 class="mb-3">Get the news</h4>
-          <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-            egestas.</p>
+          <p class="text-muted">Subscribe to get the latest product news</p>
           <form action="newsEmail" method="post">
             <div class="input-group">
               <input name="newEmail" type="email" class="form-control"><span class="input-group-append">

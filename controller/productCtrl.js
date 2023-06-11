@@ -6,6 +6,7 @@ const async = require("hbs/lib/async");
 const Category = require("../models/category");
 const SubCategory = require("../models/sub_category");
 
+const addToCart = require("../models/addToCart");
 //create product
 const createProduct = asyncHandler(async (req, res) => {
   try {
@@ -53,13 +54,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
 //Get a product
 const getaProduct = asyncHandler(async (req, res) => {
 
-  
+
   try {
 
     const id = req;
- 
+
     validateMongoDbId(id);
-    
+
     const model1Doc = await Category.findOne({});
     const model2Docs = await SubCategory.find({});
 
@@ -74,7 +75,7 @@ const getaProduct = asyncHandler(async (req, res) => {
         data.subcategory.forEach((sub) => {
 
 
-        
+
 
           if (sub.subcategoryId == category.id) {
             const categoryData = {
@@ -88,16 +89,16 @@ const getaProduct = asyncHandler(async (req, res) => {
         });
       });
     });
- 
+
     const findProduct = await Product.findById(id);
- 
-  
-    
-    res.render('user/productDetail', { product: findProduct ,header:nestedData });
+
+
+
+    res.render('user/productDetail', { product: findProduct, header: nestedData });
     // res.json(findProduct);
     // headerData(req,res);
-  
-  } 
+
+  }
   catch (error) {
     throw new Error(error);
   }
@@ -107,33 +108,33 @@ const getaProduct = asyncHandler(async (req, res) => {
 
 // const productDetails = async (req, res) => {
 //   try {
-    
+
 //     res.render('user/productDetail')
-  
+
 //   } catch (error) {
 
 //     console.log(error.message);
 //   }
-  
+
 // }
 
 //Get all products
-const getAllProduct = asyncHandler(async (req, res,type,id,categoryId) => {
+const getAllProduct = asyncHandler(async (req, res, type, id, categoryId) => {
   try {
-   
+
     // Filtering
     const queryObj = { ...req.query };
     const excludeFields = ["page", "sort", "limit", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    let query ;
-    if(type=="All"){
-      query = Product.find({deleted:false});
-    }else{
-       query = Product.find({category:type,product_sub_category:id,sub_category:categoryId});
+    let query;
+    if (type == "All") {
+      query = Product.find({ deleted: false, },);
+    } else {
+      query = Product.find({ category: type, product_sub_category: id, sub_category: categoryId, deleted: false });
     }
-   
+
 
     // Sorting
 
@@ -168,7 +169,7 @@ const getAllProduct = asyncHandler(async (req, res,type,id,categoryId) => {
     const model1Doc = await Category.findOne({});
     const model2Docs = await SubCategory.find({});
 
-    
+
 
     const nestedData = {
       _id: model1Doc._id,
@@ -192,22 +193,22 @@ const getAllProduct = asyncHandler(async (req, res,type,id,categoryId) => {
       });
     });
     console.log(nestedData);
-    var isLoggedIn= await isUserLoggedIn(req.cookies.email);
-   
+    var isLoggedIn = await isUserLoggedIn(req.cookies.email);
+    var cartCount=await addToCart.count();
     // res.json(product);
-    res.render('user/category', { product: product ,header: nestedData,category:type ,isLoggedIn:isLoggedIn});
+    res.render('user/category', { product: product, header: nestedData, category: type, isLoggedIn: isLoggedIn,cartCount});
   } catch (error) {
     throw new Error(error);
   }
 });
 
-function isUserLoggedIn(email){
+function isUserLoggedIn(email) {
   console.log(email);
-  if(email === undefined || email === ''){
+  if (email === undefined || email === '') {
     return false;
   }
   return true;
-  }
+}
 const headerData = asyncHandler(async (req, res) => {
   try {
     const model1Doc = await Category.findOne({});
@@ -234,17 +235,17 @@ const headerData = asyncHandler(async (req, res) => {
         });
       });
     });
-  
+
     // Redirect to another URL with the encoded data as a query parameter
     //res.redirect(`/homepage?data=${nestedData}`);
     try {
       // console.log(req.query.data);
-       res.redirect("homepage")
-   
-     } catch (error) {
-   
-       console.log(error.message);
-     }
+      res.redirect("homepage")
+
+    } catch (error) {
+
+      console.log(error.message);
+    }
 
     console.log(nestedData);
   } catch (error) {

@@ -1,5 +1,5 @@
 const express = require('express');
-const {orderDetail, changeOrderStatus,
+const { orderDetail, changeOrderStatus,
     orderList,
     createSubCategoryAPI,
     createSubCategory,
@@ -17,7 +17,7 @@ const {orderDetail, changeOrderStatus,
     deleteCustomer,
     deleteProduct,
     blockCustomer,
-    logoutAdmin } = require('../controller/adminCtrl');
+    logoutAdmin, last7Days, last30days, D2023, D2022, older } = require('../controller/adminCtrl');
 
 const router = express.Router();
 //router.post("/uploadProducts", uploadProductsOnServer)
@@ -41,6 +41,13 @@ router.post("/createSubCategoryAPI", createSubCategoryAPI)
 router.get("/orderList", orderList)
 router.get('/changeOrderStatus', changeOrderStatus);
 router.get('/orderDetail', orderDetail);
+
+router.get('/last7Days', last7Days);
+router.get('/last30days', last30days);
+router.get('/2023', D2023);
+router.get('/2022', D2022);
+router.get('/older', older);
+
 
 //router.get('/createProduct',createProductPage)
 

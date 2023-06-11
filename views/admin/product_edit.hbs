@@ -328,8 +328,8 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleTextarea1">Product Detail</label>
-                      <div id="editor" name="editorContent" style="height:250px" value="{{data.description}} "></div>
-                      <input name="about" type="hidden" value="{{data.description}} ">
+                      <div id="editor" name="editorContent" style="height:250px "></div>
+                      <input name="about" type="hidden" >
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail3">Price</label>
@@ -409,7 +409,7 @@
     var quill = new Quill('#editor', {
         theme: 'snow'
     });
-    quill.clipboard.dangerouslyPasteHTML("{{data.description}} ");
+    quill.clipboard.dangerouslyPasteHTML("{{{data.description}}} ");
     function previewImages(event) {
       const fileInput = event.target;
       const imagePreview = document.getElementById('imagePreview');

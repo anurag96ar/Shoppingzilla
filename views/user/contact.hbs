@@ -41,7 +41,12 @@
 
                     <div class="col-lg-12 text-center text-lg-right">
                         <ul class="menu list-inline mb-0">
+                            {{#if isLoggedIn}}
+   <div></div>  {{else}}
                             <li class="list-inline-item"><a href="loginPage">Register | Login</a></li>
+                          
+                         
+                            {{/if}}
                             <li class="list-inline-item"><a href="contact">Contact</a></li>
 
                         </ul>
@@ -151,7 +156,8 @@
 
                         </li>
                     </ul>
-                    <div class="navbar-buttons d-flex justify-content-end">
+                {{#if isLoggedIn}}  
+                     <div class="navbar-buttons d-flex justify-content-end">
                         <!-- /.nav-collapse-->
                         <div id="search-not-mobile" class="navbar-collapse collapse"></div>
                         <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a href="cart"
@@ -164,6 +170,9 @@
 
 
                     </div>
+                    {{else}}
+                    <div></div>
+                    {{/if}}
                 </div>
             </div>
         </nav>
@@ -198,7 +207,7 @@
               *** PAGES MENU ***
               _________________________________________________________
               -->
-                      
+
                     </div>
                     <div class="col-lg-12">
                         <div id="contact" class="box">
@@ -207,12 +216,12 @@
                                 products?</p>
                             <p>Please feel free to contact us, our customer service center is working for you 24/7.</p>
                             <hr>
-                         
+
                             <!-- /.row-->
-                       
-                         
-                           
-                         
+
+
+
+
                             <form action="sendMail" method="post">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -264,48 +273,44 @@
     *** FOOTER ***
     _________________________________________________________
     -->
-    <div id="footer">
-        <div class="container">
-            <div class="row">
+   <div id="footer">
+    <div class="container">
+      <div class="row">
 
-                <!-- /.col-lg-3-->
+        <!-- /.col-lg-3-->
 
-                <!-- /.col-lg-3-->
-                <div class="col-lg-6 col-md-6">
-                    <h4 class="mb-3">Where to find us</h4>
-                    <p><strong>ShoppingZilla Ltd.</strong><br>13/25 New Avenue<br>New Heaven<br>45Y
-                        73J<br>England<br><strong>Great
-                            Britain</strong></p><a href="#">Go to contact page</a>
-                    <hr class="d-block d-md-none">
-                </div>
-                <!-- /.col-lg-3-->
-                <div class="col-lg-6 col-md-6">
-                    <h4 class="mb-3">Get the news</h4>
-                    <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
-                        turpis
-                        egestas.</p>
-                    <form>
-                        <div class="input-group">
-                            <input type="text" class="form-control"><span class="input-group-append">
-                                <button type="button" class="btn btn-outline-secondary">Subscribe!</button></span>
-                        </div>
-                        <!-- /input-group-->
-                    </form>
-                    <hr>
-                    <h4 class="mb-3">Stay in touch</h4>
-                    <p class="social"><a href="#" class="facebook external"><i class="fa fa-facebook"></i></a><a
-                            href="#" class="twitter external"><i class="fa fa-twitter"></i></a><a href="#"
-                            class="instagram external"><i class="fa fa-instagram"></i></a><a href="#"
-                            class="gplus external"><i class="fa fa-google-plus"></i></a><a href="#"
-                            class="email external"><i class="fa fa-envelope"></i></a>
-                    </p>
-                </div>
-                <!-- /.col-lg-3-->
-            </div>
-            <!-- /.row-->
+        <!-- /.col-lg-3-->
+        <div class="col-lg-6 col-md-6">
+          <h4 class="mb-3">Where to find us</h4>
+          <p><strong>ShoppingZilla Ltd.</strong><br>Duo City<br>#40<br>45Y
+            73J<br>India<br><strong>Electronic City</strong></p><a href="contact">Go to contact page</a>
+          <hr class="d-block d-md-none">
         </div>
-        <!-- /.container-->
+        <!-- /.col-lg-3-->
+        <div class="col-lg-6 col-md-6">
+          <h4 class="mb-3">Get the news</h4>
+          <p class="text-muted">Subscribe to get the latest product news</p>
+          <form action="newsEmail" method="post">
+            <div class="input-group">
+              <input name="newEmail" type="email" class="form-control"><span class="input-group-append">
+                <button type="submit" class="btn btn-outline-secondary">Subscribe!</button></span>
+            </div>
+            <!-- /input-group-->
+          </form>
+          <hr>
+          <h4 class="mb-3">Stay in touch</h4>
+          <p class="social"><a href="https://www.facebook.com/anurag.ar.908?mibextid=ZbWKwL" class="facebook external"><i class="fa fa-facebook"></i></a><a href="#"
+              class="twitter external"><i class="fa fa-twitter"></i></a><a href="https://www.instagram.com/anurag96ar/" class="instagram external"><i
+                class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
+                class="fa fa-google-plus"></i></a><a href="#" class="email external"><i class="fa fa-envelope"></i></a>
+          </p>
+        </div>
+        <!-- /.col-lg-3-->
+      </div>
+      <!-- /.row-->
     </div>
+    <!-- /.container-->
+  </div>
     <!-- /#footer-->
     <!-- *** FOOTER END ***-->
 

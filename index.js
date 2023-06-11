@@ -22,7 +22,7 @@ const Product = require("./models/productModel");
 const addToCart = require("./models/addToCart");
 const session = require('express-session')
 const { ObjectId } = require('mongodb');
-const exphbs = require('express-handlebars');
+
 
 connectDB();
 
@@ -95,8 +95,15 @@ Handlebars.registerHelper('gt', function(a, b, options) {
   }
   return options.inverse(this);
 });
-
+const hbs = require('hbs');
 app.set('view engine', 'hbs')
+hbs.registerHelper('if_equal', function(a, b, opts) {
+  if (a == b) {
+      return opts.fn(this)
+  } else {
+      return opts.inverse(this)
+  }
+});
 app.use('/api/user/', authRouter)
 app.use("/api/product", productRouter);
 app.use('/admin', adminRouter);

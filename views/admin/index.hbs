@@ -22,30 +22,30 @@
   <link rel="shortcut icon" href="/admin-styles/images/favicon.png" />
   <script>
     // Disable the back button
-   // window.history.forward();
+    // window.history.forward();
     //function disableBackButton() {
-   //   window.history.pushState(null, null, location.href);
-   //   window.onpopstate = function () {
+    //   window.history.pushState(null, null, location.href);
+    //   window.onpopstate = function () {
     //    history.go(1);
-   // }
+    // }
 
     window.history.pushState(null, null, location.href);
     window.onpopstate = function () {
-      window.location.href = 'admin/loginAdmin';
+      // window.location.href = 'admin/loginAdmin';
     };
 
 
   </script>
 </head>
 
-<body onload="disableBackButton()">
+<body>
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png" class="mr-2"
+        <a class="navbar-brand brand-logo mr-5" href="index"><img src="/admin-styles/images/logo.png" class="mr-2"
             alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img src="/admin-styles/images/logo-mini.svg"
+        <a class="navbar-brand brand-logo-mini" href="index"><img src="/admin-styles/images/logo-mini.svg"
             alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -407,7 +407,7 @@
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
-          <div class="row">
+ <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
@@ -415,24 +415,53 @@
                   <h6 class="font-weight-normal mb-0">All systems are running smoothly!</h6>
                 </div>
                 <div class="col-12 col-xl-4">
-                  <div class="justify-content-end d-flex">
-                    <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                      <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate2"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="mdi mdi-calendar"></i> Today (10 Jan 2021)
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                        <a class="dropdown-item" href="#">January - March</a>
-                        <a class="dropdown-item" href="#">March - June</a>
-                        <a class="dropdown-item" href="#">June - August</a>
-                        <a class="dropdown-item" href="#">August - November</a>
-                      </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="col-md-12 grid-margin transparent ">
+              <div class="row">
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-tale">
+                    <div class="card-body">
+                      <p class="mb-4">Today’s Bookings</p>
+                      <p class="fs-30 mb-2">{{todayBooking}}</p>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-dark-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Total Bookings</p>
+                      <p class="fs-30 mb-2">{{totalBooking}}</p>
+
+                    </div>
+                  </div>
+                </div>
+             
+                <div class="col-md-3 mb-4  stretch-card transparent">
+                  <div class="card card-light-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Cancelled Order</p>
+                      <p class="fs-30 mb-2">{{cancelled}}</p>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-light-danger">
+                    <div class="card-body">
+                      <p class="mb-4">Number of Clients</p>
+                      <p class="fs-30 mb-2">{{totalCustomer}}</p>
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+         
           <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card tale-bg">
@@ -441,7 +470,7 @@
                   <div class="weather-info">
                     <div class="d-flex">
                       <div>
-                        <h2 class="mb-0 font-weight-normal"><i class="icon-sun mr-2"></i>31<sup>C</sup></h2>
+                        <h2 class="mb-0 font-weight-normal"><i class="icon-sun mr-2"></i>{{temp}}<sup>C</sup></h2>
                       </div>
                       <div class="ml-2">
                         <h4 class="location font-weight-normal">Bangalore</h4>
@@ -452,75 +481,28 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6 grid-margin transparent">
-              <div class="row">
-                <div class="col-md-6 mb-4 stretch-card transparent">
-                  <div class="card card-tale">
-                    <div class="card-body">
-                      <p class="mb-4">Today’s Bookings</p>
-                      <p class="fs-30 mb-2">4006</p>
-                      <p>10.00% (30 days)</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4 stretch-card transparent">
-                  <div class="card card-dark-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Total Bookings</p>
-                      <p class="fs-30 mb-2">61344</p>
-                      <p>22.00% (30 days)</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
-                  <div class="card card-light-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Number of Meetings</p>
-                      <p class="fs-30 mb-2">34040</p>
-                      <p>2.00% (30 days)</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 stretch-card transparent">
-                  <div class="card card-light-danger">
-                    <div class="card-body">
-                      <p class="mb-4">Number of Clients</p>
-                      <p class="fs-30 mb-2">47033</p>
-                      <p>0.22% (30 days)</p>
-                    </div>
-                  </div>
+           <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                     <div class="card-body">
+                <div class="card-people mt-auto">
+                  <h4 class="card-title">Customer Chart</h4>
+                  <div>
+                  <canvas id="myChart" style="height:250px;"></canvas></div>
+                 </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
+
+           
+            <div class="col-lg-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Order Details</p>
-                  <div class="d-flex flex-wrap mb-5">
-                    <div class="mr-5 mt-3">
-                      <p class="text-muted">Upcoming....</p>
-
-                    </div>
-
+                  <h4 class="card-title">Sales Chart</h4>
+                  <div>
+                    <canvas id="areaChart" style="height: 300px;"></canvas>
                   </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between">
-                    <p class="card-title">Sales Report</p>
-
-                  </div>
-                  <p class="font-weight-500">Upcoming....</p>
-
-
                 </div>
               </div>
             </div>
@@ -564,6 +546,93 @@
   <script src="/admin-styles/js/dashboard.js"></script>
   <script src="/admin-styles/js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var ctx = document.getElementById('myChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ["InActive Customer's", "Active Customer's",],
+          datasets: [{
+            label: 'Data',
+            data: [{{ userPieData }}],
+
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 159, 64, 0.5)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 2,
+          fill: false
+        }]
+      },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+      });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      var ctx = document.getElementById('areaChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ["2021", "2022", "2023",],
+          datasets: [{
+            label: 'Cancelled Order',
+            data: [{{cancelledData}}],
+            borderColor: ['rgba(255, 99, 132, 0.5)'],
+            backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+            borderWidth: 5,
+            fill: true
+          },
+          {
+            label: 'Delivered Successfully Order',
+            data: [{{delivered}}],
+            borderColor: ['rgba(15, 252, 3,0.5)'],
+            backgroundColor: ['rgba(15, 252, 3,0.5)'],
+            borderWidth: 5,
+            fill: true
+          },
+          {
+            label: 'Order Placed ',
+            data:[{{placed}}],
+            borderColor: ['rgba(8, 102, 196, 0.5)'],
+            backgroundColor: ['rgba(8, 102, 196, 0.8)'],
+            borderWidth: 5,
+            fill: true
+          }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    });
+  </script>
+
+
+
+
+
+
+
+  </script>
 </body>
+
 
 </html>

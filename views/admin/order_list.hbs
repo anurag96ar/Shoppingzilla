@@ -66,10 +66,9 @@
     <!-- partial:/admin-styles/partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png"
-            class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img
-            src="/admin-styles/images/logo-mini.svg" alt="logo" /></a>
+        <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png" class="mr-2"
+            alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="#"><img src="/admin-styles/images/logo-mini.svg" alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -455,7 +454,31 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Order List</h4>
+                  <div class="row justify-content-between d-flex card-body">
+                    <h4 class="card-title">Order List</h4>
+                    <div class="justify-content-end d-flex">
+                      <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                        <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button"
+                          id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <i class="mdi mdi-calendar"></i> {{dropdownText}}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
+                          <a class="dropdown-item" href="last7Days">Last 7 days</a>
+                          <a class="dropdown-item" href="last30days">Last 30 days</a>
+                          <a class="dropdown-item" href="2023">2023</a>
+                          <a class="dropdown-item" href="2022">2022</a>
+                          <a class="dropdown-item" href="older">Older</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  {{#if_equal orderList.length 0}}
+                  <br>
+                  <div class="justify-content-center d-flex">
+                    <img src="/no_data.png" class="mr-2" style="width: 40%;" />
+                  </div>
+                  {{else}}
 
                   <div class="table-responsive">
                     <table class="table table-striped">
@@ -502,60 +525,67 @@
                           <td>
                             {{this.email}}
                           </td>
-                          <td>
+                          <td style="font-size:14px;color:   {{#if_equal this.paymentStatus " Cancelled"}} red {{else}}
+                            black {{/if_equal}} ">
 
 
-                            <div class="btn-group">
-                              <button type="button" class="badge badge-primary dropdown-toggle dropdown-toggle-split"
-                                id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                           {{#if_equal this.paymentStatus " Cancelled"}} {{else}} <div class="btn-group">
+                            <button type="button" class="badge badge-primary dropdown-toggle dropdown-toggle-split"
+                              id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false">
 
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
-                                <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Shipped">Shipped</a>
-                                <br>
-                                <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Out for Delivery">Out
-                                  for Delivery</a> <br>
-                                <a class="dropdown-item"
-                                  href="changeOrderStatus?id={{_id}}&status=Delivered">Delivered</a> <br>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Cancelled">Cancel
-                                  Order</a>
-                              </div>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                              <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Shipped">Shipped</a>
+                              <br>
+                              <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Out for Delivery">Out
+                                for Delivery</a> <br>
+                              <a class="dropdown-item"
+                                href="changeOrderStatus?id={{_id}}&status=Delivered">Delivered</a> <br>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="changeOrderStatus?id={{_id}}&status=Cancelled">Cancel
+                                Order</a>
                             </div>
-                            {{this.paymentStatus}}
-                          </td>
 
 
-                          <td>
-
-                            <a href="orderDetail?id={{this._id}}"> <label class="badge badge-success">View</label></a>
-                          </td>
-                        </tr>
-                        {{/each}}
-
-                      </tbody>
-                    </table>
                   </div>
+                  {{/if_equal}}
+
+                  <b>{{this.paymentStatus}}</b>
+                  </td>
+
+
+                  <td>
+
+                    <a href="orderDetail?id={{this._id}}"> <label class="badge badge-success">View</label></a>
+                  </td>
+                  </tr>
+                  {{/each}}
+
+                  </tbody>
+                  </table>
+
                 </div>
+                {{/if_equal}}
               </div>
             </div>
+          </div>
 
-          </div>
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:/admin-styles/partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023. All rights
-              reserved ShoppingZilla.</span>
-          </div>
-        </footer>
-        <!-- partial -->
       </div>
-      <!-- main-panel ends -->
+      <!-- content-wrapper ends -->
+      <!-- partial:/admin-styles/partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023. All rights
+            reserved ShoppingZilla.</span>
+        </div>
+      </footer>
+      <!-- partial -->
     </div>
-    <!-- page-body-wrapper ends -->
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->

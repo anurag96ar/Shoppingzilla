@@ -9,8 +9,8 @@ const User = require("../models/userModel");
 const multer = require('multer');
 const Order = require("../models/order");
 const { ObjectId } = require('mongodb');
-
-
+const axios = require('axios');
+const Razorpay = require("razorpay");
 // Configure multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -46,7 +46,7 @@ const updateProduct = asyncHandler(async (req, res) => {
             category,
             quantity
         };
-        console.log(productData);
+
 
         const filter = { _id: id, deleted: false }; // Replace with the document ID you want to update
         const update = { $set: { title: title, description: description, price: price, brand: brand, category: category, quantity: quantity } }; // Specify the field and its new value
@@ -68,26 +68,25 @@ const editProduct = async (req, res) => {
     try {
         let productId = req.query.productId;
         const data = await Product.find({ _id: productId });
-        console.log(data);
+
         res.render('admin/product_edit', { data: data[0] });
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 
 const customerList = async (req, res) => {
     try {
 
-        console.log(req.query.page);
-        console.log(req.query.pre)
+
         var page;
         if (req.query.pre == "true") {
             page = parseInt(req.query.page) - 1 || 1;
         }
         else {
             page = parseInt(req.query.page) + 1 || 1;
-            console.log(page);
+
         }
 
         // Get the requested page number
@@ -108,7 +107,7 @@ const customerList = async (req, res) => {
         // res.render('admin/customers', { users: users });
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const createProductPage = async (req, res) => {
@@ -117,28 +116,28 @@ const createProductPage = async (req, res) => {
         res.render('/admin/product_create', { category: data[0].category });
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const productListPage = async (req, res) => {
     try {
 
         const data = await Product.find({ deleted: false });
-        console.log(data);
+
         res.render('admin/product_list', { list: data });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const createSubCategory = async (req, res) => {
     try {
 
         const data = await Category.find();
-        console.log(data[0].category);
+
 
         res.render('admin/create_subcategory', { category: data[0].category });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const createSubCategoryAPI = async (req, res) => {
@@ -146,8 +145,8 @@ const createSubCategoryAPI = async (req, res) => {
 
         var data = req.body.category;
         var sub_category = req.body.subcategory;
-        console.log("data+sub_category");
-        console.log(data + sub_category);
+
+
         let myobj = [
             { name: 'John', address: 'Highway 71' },
             { name: 'Peter', address: 'Lowstreet 4' },
@@ -168,26 +167,26 @@ const createSubCategoryAPI = async (req, res) => {
         //     myobj,
         //     (err, result) => {
         //       if (err) {
-        //         console.log('Error adding data to MongoDB:', err);
+        //         'Error adding data to MongoDB:', err);
         //       } else {
-        //         console.log('Data added successfully!');
+        //         'Data added successfully!');
         //       }
         //     });
 
         // res.render('admin/product_create', { category: data[0].category });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const productSearch = async (req, res) => {
     try {
 
-        console.log(req.query.search);
+
         Product.find({ title: { $regex: req.query.search, $options: 'i' } })
             .then(users => res.render('admin/product_list', { list: users }))
             .catch(err => console.error(err));
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 
@@ -195,19 +194,19 @@ const subCategories = async (req, res) => {
     try {
 
         const subcategoryId = req.query.categoryId;
-        console.log(subcategoryId);
+
         // Retrieve subcategories based on the selected subcategory ID
         const result = await SubCategory.findOne({ 'subcategory.subcategoryId': subcategoryId });
-        console.log(result);
+
         if (result) {
             const subcategory = result.subcategory.find((subcategory) => subcategory.subcategoryId === subcategoryId);
-            console.log(subcategory.data);
+
             res.json(subcategory.data);
         } else {
             return null; // Return null if subcategoryId is not found
         }
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const adminLoginPage = async (req, res) => {
@@ -215,34 +214,78 @@ const adminLoginPage = async (req, res) => {
 
         res.render('admin/login', { message: "" });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const adminLoginAPI = async (req, res) => {
     try {
 
         if (req.body.email == "admin@gmail.com" && req.body.password == "1234") {
-            res.render('admin/index');
+            res.redirect('index');
         }
         else {
             res.render('admin/login', { message: "Invalid Credentails" });
         }
     } catch (error) {
-        console.log(error.message);
+
     }
 }
+
 const adminIndexPage = async (req, res) => {
     try {
+        const data = await dashbaordData();
 
-        res.render('admin/index');
+        const weatherData = await getWeatherData();
+
+        const blockUser = await User.count({
+            $or: [
+                { isBlocked: true, },
+                { isDeleted: true }
+            ]
+        }
+        )
+        const activeUser = await User.count({
+            $and: [
+                { isBlocked: false, },
+                { isDeleted: false }
+            ]
+        })
+
+
+
+        // Calculate the start and end dates of the target year
+        var cancelledData = await drawLineChartCancelled("Cancelled");
+        var delivered = await drawLineChartCancelled("Delivered");
+        var placed = await drawLineChartCancelled("Order Placed");
+
+        const userPieData = [blockUser, activeUser];
+        res.render('admin/index', { temp: weatherData.temp, userPieData,delivered, placed,cancelledData, todayBooking: data.todayBooking, totalBooking: data.totalBooking, cancelled: data.cancelled, totalCustomer: data.totalCustomer });
+        // res.render('admin/index', { location: weatherData.location, temperature: weatherData.temperature });
     } catch (error) {
-        console.log(error.message);
+        console.log(error)
     }
 }
 
+
+async function drawLineChartCancelled(status) {
+
+    const startDate1 = new Date(2021, 0, 1); // January 1st
+    const endDate1 = new Date(2021 + 1, 0, 1);
+    var data2021 = await Order.count({ placedDate: { $gte: startDate1, $lt: endDate1 }, paymentStatus: status }).sort({ placedDate: -1 });
+
+    const startDate = new Date(2022, 0, 1); // January 1st
+    const endDate = new Date(2022 + 1, 0, 1);
+    var data2022 = await Order.count({ placedDate: { $gte: startDate, $lt: endDate }, paymentStatus: status }).sort({ placedDate: -1 });
+
+
+    const startDate2 = new Date(2023, 0, 1); // January 1st
+    const endDate2 = new Date(2023 + 1, 0, 1);
+    var data2023 = await Order.count({ placedDate: { $gte: startDate2, $lt: endDate2 }, paymentStatus: status }).sort({ placedDate: -1 });
+    return [data2021, data2022, data2023];
+}
 const customerSearch = async (req, res) => {
     try {
-        console.log(req.query.search);
+
         const page = parseInt(req.query.page) || 1; // Get the requested page number
         const perPage = 10;
         // Query the total count of users
@@ -258,21 +301,21 @@ const customerSearch = async (req, res) => {
             }))
             .catch(err => console.error(err));
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 
 const deleteCustomer = async (req, res) => {
     try {
         const data = req.query.dataId
-        console.log(data)
-        console.log("Delete a user");
+
+
         const users = await User.findOneAndUpdate({ email: data }, { $set: { isDeleted: true } });
         const usersData = await User.find({ isDeleted: false });
-        console.log(users);
+
         res.render('admin/customers', { users: usersData });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 
@@ -284,22 +327,22 @@ const deleteProduct = async (req, res) => {
         const options = { returnOriginal: false };
         const users = await Product.findOneAndUpdate(filter, update, options);
         const data = await Product.find({ deleted: false });
-        console.log(data);
+
         res.render('admin/product_list', { list: data });
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const blockCustomer = async (req, res) => {
     var data = req.query.dataId;
     var blockedValue = req.query.blockedValue;
-    console.log(blockedValue);
+
     if (blockedValue == 'Active') {
         blockedValue = true;
     } else {
         blockedValue = false;
     }
-    console.log(blockedValue);
+
     try {
         // Update the document
         const filter = { email: data }; // Replace with the document ID you want to update
@@ -307,12 +350,12 @@ const blockCustomer = async (req, res) => {
         const options = { returnOriginal: false }; // Return the updated document
         const result = await User.findOneAndUpdate(filter, update, options);
         const users = await User.find({ isDeleted: false });
-        console.log(users);
+
         res.render('admin/customers', { users: users });
 
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 
@@ -323,7 +366,7 @@ const logoutAdmin = async (req, res) => {
         // Update the document
         // req.session.destroy(function (err) {
         //     if (err) {
-        //         console.log(err);
+        //         err);
         //         res.send("Error")
         //     } else {
         //         //session.isLoggedIn = false;
@@ -334,18 +377,18 @@ const logoutAdmin = async (req, res) => {
         //     }
         // })
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const orderList = async (req, res) => {
 
     try {
         var data = await Order.find();
-        console.log(data);
-        res.render("admin/order_list", { orderList: data });
+
+        res.render("admin/order_list", { orderList: data, dropdownText: "Last 7 days" });
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
 const changeOrderStatus = async (req, res) => {
@@ -357,19 +400,45 @@ const changeOrderStatus = async (req, res) => {
         }
         else if (req.query.status == "Delivered") {
             var changeStatus = await Order.findOneAndUpdate({ _id: req.query.id }, { $set: { paymentStatus: req.query.status, DeliveredDate: Date.now() } });
-        } else {
+        } else if (req.query.status == "Out for Delivery") {
             var changeStatus = await Order.findOneAndUpdate({ _id: req.query.id }, { $set: { paymentStatus: req.query.status, OutDeliveryDate: Date.now() } });
+        } else {
+            var changeStatus = await Order.findOneAndUpdate({ _id: req.query.id }, { $set: { paymentStatus: req.query.status, CancelDate: Date.now() } });
+
+            if (changeStatus.paymentMode == "CARD") {
+                initiateRefund(changeStatus.paymentId, changeStatus.totalAmount)
+            }
         }
 
 
         var data = await Order.find();
-        console.log(data);
-        res.render("admin/order_list", { orderList: data });
+
+        res.render("admin/order_list", { orderList: data, dropdownText: "Last 7 days" });
 
     } catch (error) {
-        console.log(error.message);
+
     }
 }
+const razorpay = new Razorpay({
+    key_id: "rzp_test_TmlmyXmr8AmCLC",
+    key_secret: "pNNHoS4NOwkUhQYzVGNwnMJX",
+});
+
+async function initiateRefund(PAYMENT_ID, REFUND_AMOUNT) {
+    try {
+        razorpay.payments.refund(PAYMENT_ID, { amount: REFUND_AMOUNT })
+            .then((response) => {
+
+            })
+            .catch((error) => {
+                console.error('Error initiating refund:', error);
+            });
+
+    } catch (error) {
+
+    }
+}
+
 const orderDetail = async (req, res) => {
 
     try {
@@ -404,10 +473,123 @@ const orderDetail = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error.message);
+
+    }
+}
+// Fetch weather data
+async function getWeatherData() {
+    const apiKey = '4d580cc975a64c5472b9b3b53c9b04db';
+    const apiUrl = 'http://api.openweathermap.org/data/2.5/weather?units=metric&q=Bangalore&units=metric&appid=' + apiKey;
+
+    try {
+        const response = await axios.get(apiUrl);
+
+
+        const temp = response.data.main.temp;
+
+        return { temp };
+    } catch (error) {
+
+        throw new Error('Failed to fetch weather data.');
+    }
+}
+
+async function dashbaordData() {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    try {
+        const todayBooking = await Order.count({ $expr: { $eq: [{ $dateToString: { format: '%Y-%m-%d', date: '$placedDate' } }, today.toISOString().substring(0, 10)] } })
+        const totalBooking = await Order.count()
+        const cancelled = await Order.count({ paymentStatus: "Cancelled" })
+        const totalCustomer = await User.count()
+
+        return { todayBooking, totalBooking, totalBooking, cancelled, totalCustomer };
+    } catch (error) {
+
+
+    }
+}
+
+const last7Days = async (req, res) => {
+
+    try {
+
+
+        const fifteenDaysAgo = new Date();
+        fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 7);
+        var orderList = await Order.find({ placedDate: { $gte: fifteenDaysAgo } }).sort({ placedDate: -1 });
+
+        res.render("admin/order_list", { orderList: orderList, dropdownText: "Last 7 days" });
+
+    } catch (error) {
+
+    }
+}
+const last30days = async (req, res) => {
+
+    try {
+
+
+        const last30daysData = new Date();
+        last30daysData.setDate(last30daysData.getDate() - 30);
+        var orderList = await Order.find({ placedDate: { $gte: last30daysData } }).sort({ placedDate: -1 });
+
+        res.render("admin/order_list", { orderList: orderList, dropdownText: "Last 30 days" });
+
+    } catch (error) {
+
+    }
+}
+const D2023 = async (req, res) => {
+
+    try {
+
+
+        const targetYear = 2023;
+
+        // Calculate the start and end dates of the target year
+        const startDate = new Date(targetYear, 0, 1); // January 1st
+        const endDate = new Date(targetYear + 1, 0, 1);
+        var orderList = await Order.find({ placedDate: { $gte: startDate, $lt: endDate } }).sort({ placedDate: -1 });
+
+        res.render("admin/order_list", { orderList: orderList, dropdownText: "2023" });
+
+    } catch (error) {
+
+    }
+}
+const D2022 = async (req, res) => {
+
+    try {
+
+        const targetYear = 2022;
+        // Calculate the start and end dates of the target year
+        const startDate = new Date(targetYear, 0, 1); // January 1st
+        const endDate = new Date(targetYear + 1, 0, 1);
+        var orderList = await Order.find({ placedDate: { $gte: startDate, $lt: endDate } }).sort({ placedDate: -1 });
+
+        res.render("admin/order_list", { orderList: orderList, dropdownText: "2022" });
+
+    } catch (error) {
+
+    }
+}
+const older = async (req, res) => {
+
+    try {
+
+
+
+        var orderList = await Order.find().sort({ placedDate: -1 });
+
+        res.render("admin/order_list", { orderList: orderList, dropdownText: "Older" });
+
+    } catch (error) {
+
     }
 }
 module.exports = {
+    older, D2022, D2023, last30days, last7Days,
     orderDetail,
     changeOrderStatus,
     orderList,
@@ -428,5 +610,6 @@ module.exports = {
     blockCustomer,
     logoutAdmin,
     createSubCategory,
-    createSubCategoryAPI
+    createSubCategoryAPI,
+
 };

@@ -30,6 +30,7 @@ const pdf = require("html-pdf");
 const fs = require("fs");
 const crypto = require("crypto");
 const session = require("express-session");
+const axios = require('axios');
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const findUser = await User.findOne({ email: email });
@@ -100,8 +101,9 @@ const homePage = async (req, res) => {
   try {
     const isAuthenticated = req.user ? true : false;
     var data = await nestedHeaderData();
-
-    res.render("user/index", { header: data, isAuthenticated: true });
+    var isLoggedIn= await isUserLoggedIn(req.cookies.email);
+    var cartCount=await addToCart.count();
+    res.render("user/index", { header: data, isLoggedIn: isLoggedIn,cartCount:cartCount });
   } catch (error) {
     console.log(error.message);
   }
@@ -546,6 +548,7 @@ const addCart = asyncHandler(async (req, res) => {
       wait: true,
     });
   }
+  res.redirect('cart')
 });
 
 //get user cart
@@ -554,7 +557,8 @@ const getUserCart = asyncHandler(async (req, res) => {
     var cartData = await getCartData(req.cookies.email);
     /////
     var data = await nestedHeaderData();
-    res.render("user/cart", { cart: cartData, header: data });
+    var isLoggedIn= await isUserLoggedIn(req.cookies.email);
+    res.render("user/cart", { cart: cartData, header: data,isLoggedIn:isLoggedIn });
   } catch (error) {
     throw new Error(error);
   }
@@ -823,7 +827,7 @@ const orderDetails = async (req, res) => {
       currentStatus =
         "Order Placed on ( " +
         orderPlacedData[0].placedDate +
-        " ) ---> Shipped on ( ${orderPlacedData[0].shippedDate} )---> Out for Deliver  on ( " +
+        " ) ---> Shipped on "+ orderPlacedData[0].shippedDate +")---> Out for Deliver  on ( " +
         orderPlacedData[0].OutDeliveryDate +
         " ) ---> Deliver soon.. ";
     } else if (orderPlacedData[0].paymentStatus == "Delivered") {
@@ -856,6 +860,9 @@ const cancelOrder = async (req, res) => {
       { _id: new ObjectId(req.query.id) },
       { $set: { paymentStatus: "Cancelled", cancelDate: Date.now() } }
     );
+    if(orderPlacedData.paymentMode=="CARD" && orderPlacedData.paymentStatus!="Cancelled" ){
+    initiateRefund(orderPlacedData.paymentId,orderPlacedData.totalAmount)
+  }
     res.render("user/cancel-order");
   } catch (error) {
     console.log(error.message);
@@ -863,7 +870,7 @@ const cancelOrder = async (req, res) => {
 };
 
 function isUserLoggedIn(email) {
-  if (email === undefined || value === "") {
+  if (email === undefined || email === "") {
     return false;
   }
   return true;
@@ -964,7 +971,8 @@ const deleteAddress = asyncHandler(async (req, res) => {
 });
 const contact = asyncHandler(async (req, res) => {
   try {
-    res.render("user/contact");
+    var isLoggedIn= await isUserLoggedIn(req.cookies.email);
+    res.render("user/contact",{isLoggedIn:isLoggedIn});
   } catch (error) {
     throw new Error(error);
   }
@@ -1025,8 +1033,8 @@ const sendContactMail = asyncHandler(async (req, res) => {
 //razopay payment
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_SrpluNT9fljGOX",
-  key_secret: "KSAPqmZdKt9W1ruK1FBsVNdc",
+  key_id: "rzp_test_TmlmyXmr8AmCLC",
+  key_secret: "pNNHoS4NOwkUhQYzVGNwnMJX",
 });
 
 const paymentGateway = asyncHandler(async (req, res) => {
@@ -1179,8 +1187,9 @@ const deleteWishItem = async (req, res) => {
     // Save the email to the database
     await email.save();
 
-    res.render("user/index");
+    res.redirect("homepage");
   } catch (error) {
+    res.redirect("homepage");
     notifier.notify({
       title: "Alert!",
       message: "Your have already subscribed",
@@ -1189,8 +1198,28 @@ const deleteWishItem = async (req, res) => {
     });
     
   }
-  res.redirect("homepage")
+  notifier.notify({
+    title: "Alert!",
+    message: "Your have successfully subscribed",
+    sound: true,
+    wait: true,
+  });
   };
+
+  async function initiateRefund(PAYMENT_ID,REFUND_AMOUNT){
+    try {
+      razorpay.payments.refund(PAYMENT_ID, { amount: REFUND_AMOUNT })
+      .then((response) => {
+        console.log('Refund initiated successfully:', response);
+      })
+      .catch((error) => {
+        console.error('Error initiating refund:', error);
+      });
+  
+  } catch (error) {
+   
+  }
+  }
 
 module.exports = {
   newsUpdateEmail,

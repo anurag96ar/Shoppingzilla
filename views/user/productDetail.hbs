@@ -38,12 +38,19 @@
     <div id="top">
       <div class="container">
         <div class="row">
-         
+
           <div class="col-lg-12 text-center text-lg-right">
             <ul class="menu list-inline mb-0">
+              {{#if isLoggedIn}}
+              <div></div>
+              {{else}}
               <li class="list-inline-item"><a href="loginPage">Register | Login</a></li>
+
+
+
+              {{/if}}
               <li class="list-inline-item"><a href="contact">Contact</a></li>
-             
+
             </ul>
           </div>
         </div>
@@ -79,8 +86,8 @@
 
 
     </div>
-   <nav class="navbar navbar-expand-lg">
-      <div class="container"><a href="/api/user/homepage" class="navbar-brand home"><img src="/userHome/img/logo.png"
+      <nav class="navbar navbar-expand-lg">
+      <div class="container"><a href="api/user/homepage" class="navbar-brand home"><img src="/userHome/img/logo.png"
             alt="ShoppingZilla logo" class="d-none d-md-inline-block"><img src="/userHome/img/logo-small.png"
             alt="ShoppingZilla logo" class="d-inline-block d-md-none"><span class="sr-only">ShoppingZilla - go to
             homepage</span></a>
@@ -107,7 +114,7 @@
                       <h5>{{this.type}}</h5>
                       <ul class="list-unstyled mb-3">
                         {{#each this.data}}
-                        <li class="nav-item"><a href="category?id={{id}}&type=Men&categoryId={{../categoryId}}"
+                        <li class="nav-item"><a href="api/user/category?id={{id}}&type=Men&categoryId={{../categoryId}}"
                             class="nav-link">{{type}}</a></li>
                         {{/each}}
                       </ul>
@@ -128,7 +135,7 @@
                       <h5>{{this.type}}</h5>
                       <ul class="list-unstyled mb-3">
                         {{#each this.data}}
-                        <li class="nav-item"><a href="category?id={{id}}&type=Ladies&categoryId={{../categoryId}}"
+                        <li class="nav-item"><a href="api/user/category?id={{id}}&type=Ladies&categoryId={{../categoryId}}"
                             class="nav-link">{{type}}</a></li>
                         {{/each}}
                       </ul>
@@ -138,7 +145,7 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item dropdown menu-large"><a href="category?id={{id}}&type=All&categoryId={{../categoryId}}"
+            <li class="nav-item dropdown menu-large"><a href="api/user/category?id={{id}}&type=All&categoryId={{../categoryId}}"
                 class="dropdown-toggle nav-link">All Items<b class="caret"></b></a>
 
             </li>
@@ -146,17 +153,23 @@
           <div class="navbar-buttons d-flex justify-content-end">
             <!-- /.nav-collapse-->
             <div id="search-not-mobile" class="navbar-collapse collapse"></div>
-           {{#if isLoggedIn}} <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a
-                href="cart" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span>items in
+            {{!-- <a data-toggle="collapse" href="#search"
+              class="btn navbar-btn btn-primary d-none d-lg-inline-block"><span class="sr-only">Toggle search</span><i
+                class="fa fa-search"></i></a> --}}
+            {{#if isLoggedIn}} <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a
+                href="wishlist" class="btn btn-primary navbar-btn"><i class="fa fa-heart"></i><span>My
+                  Wishlist</span></a>
+              <a href="cart" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span>items in
                   cart</span></a>
             </div>
 
             <div id="basket-overview" class="navbar-collapse collapse d-none d-lg-block"><a href="profile"
                 class="btn btn-primary navbar-btn"><i class="fa fa-user"></i><span>My Profile</span></a>
             </div>
+
             {{else}}<p></p>
             {{/if}}
-           
+
 
           </div>
         </div>
@@ -181,128 +194,10 @@
         <div class="row">
           <div class="col-lg-12">
             <!-- breadcrumb-->
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="homePage">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Ladies</a></li>
-                <li class="breadcrumb-item"><a href="#">Tops</a></li>
-                <li aria-current="page" class="breadcrumb-item active">White Blouse Armani</li>
-              </ol>
-            </nav>
+          
           </div>
-          <div class="col-lg-3 order-2 order-lg-1">
-            <!--
-              *** MENUS AND FILTERS ***
-              _________________________________________________________
-              -->
-            <div class="card sidebar-menu mb-4">
-              <div class="card-header">
-                <h3 class="h4 card-title">Categories</h3>
-              </div>
-              <div class="card-body">
-                <ul class="nav nav-pills flex-column category-menu">
-                  <li><a href="#" class="nav-link">Men <span class="badge badge-secondary">42</span></a>
-                    <ul class="list-unstyled">
-                      <li><a href="#" class="nav-link">T-shirts</a></li>
-                      <li><a href="#" class="nav-link">Shirts</a></li>
-                      <li><a href="#" class="nav-link">Pants</a></li>
 
-                    </ul>
-                  </li>
-                  <li><a href="#" class="nav-link active">Ladies <span
-                        class="badge badge-light">123</span></a>
-                    <ul class="list-unstyled">
-                      <li><a href="#" class="nav-link">T-shirts</a></li>
-                      <li><a href="#" class="nav-link">Skirts</a></li>
-                      <li><a href="#" class="nav-link">Pants</a></li>
-
-                    </ul>
-                  </li>
-                  <li><a href="#" class="nav-link">Kids <span class="badge badge-secondary">11</span></a>
-                    <ul class="list-unstyled">
-                      <li><a href="#" class="nav-link">T-shirts</a></li>
-                      <li><a href="#" class="nav-link">Skirts</a></li>
-                      <li><a href="#" class="nav-link">Pants</a></li>
-
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="card sidebar-menu mb-4">
-              <div class="card-header">
-                <h3 class="h4 card-title">Brands <a href="#" class="btn btn-sm btn-danger pull-right"><i
-                      class="fa fa-times-circle"></i> Clear</a></h3>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> Armani (10)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> Versace (12)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> Carlo Bruni (15)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> Jack Honey (14)
-                      </label>
-                    </div>
-                  </div>
-                  <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-                </form>
-              </div>
-            </div>
-            <div class="card sidebar-menu mb-4">
-              <div class="card-header">
-                <h3 class="h4 card-title">Colours <a href="#" class="btn btn-sm btn-danger pull-right"><i
-                      class="fa fa-times-circle"></i> Clear</a></h3>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"><span class="colour white"></span> White (14)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"><span class="colour blue"></span> Blue (10)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"><span class="colour green"></span> Green (20)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"><span class="colour yellow"></span> Yellow (13)
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"><span class="colour red"></span> Red (10)
-                      </label>
-                    </div>
-                  </div>
-                  <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-                </form>
-              </div>
-            </div>
-            <!-- *** MENUS AND FILTERS END ***-->
-          </div>
-          <div class="col-lg-9 order-1 order-lg-2">
+          <div class="col-lg-12 order-1 order-lg-2">
             <div id="productMain" class="row">
               <div class="col-md-6">
                 <div data-slider-id="1" class="owl-carousel shop-detail-carousel">
@@ -331,15 +226,15 @@
                   <p class="price">₹{{product.price}}</p>
                   <p class="text-center buttons">
                     {{!-- {{#if isLoggedIn}}
-                      <a href="addtoCart?id={{_id}}" class="btn btn-primary">
-                        <i class="fa fa-shopping-cart"></i>Add to cart
-                      </a>
-                      {{else}}
-                      <a href="/api/user/loginPage" class="btn btn-primary">
-                        <i class="fa fa-shopping-cart"></i>Login Required
-                      </a>
+                    <a href="addtoCart?id={{_id}}" class="btn btn-primary">
+                      <i class="fa fa-shopping-cart"></i>Add to cart
+                    </a>
+                    {{else}}
+                    <a href="/api/user/loginPage" class="btn btn-primary">
+                      <i class="fa fa-shopping-cart"></i>Login Required
+                    </a>
 
-                      {{/if}} --}}
+                    {{/if}} --}}
 
                 </div>
                 <div data-slider-id="1" class="owl-thumbs">
@@ -353,7 +248,7 @@
               <p></p>
               <h4>Product details</h4>
 
-              <div>{{product.description}}</div>
+              <div>{{{product.description}}}</div>
               </blockquote>
               <hr>
               <div class="social">
@@ -363,128 +258,7 @@
                       class="fa fa-twitter"></i></a><a href="#" class="email"><i class="fa fa-envelope"></i></a></p>
               </div>
             </div>
-            <div class="row same-height-row">
-              <div class="col-md-3 col-sm-6">
-                <div class="box same-height">
-                  <h3>You may also like these products</h3>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product2_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product2.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product1.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product1_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product1.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product3.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product3_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product3.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-            </div>
-            <div class="row same-height-row">
-              <div class="col-md-3 col-sm-6">
-                <div class="box same-height">
-                  <h3>Products viewed recently</h3>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product2_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product2.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product1.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product1_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product1.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="product same-height">
-                  <div class="flip-container">
-                    <div class="flipper">
-                      <div class="front"><a href="detail.html"><img src="/userHome/img/product3.jpg" alt=""
-                            class="img-fluid"></a></div>
-                      <div class="back"><a href="detail.html"><img src="/userHome/img/product3_2.jpg" alt=""
-                            class="img-fluid"></a></div>
-                    </div>
-                  </div><a href="detail.html" class="invisible"><img src="/userHome/img/product3.jpg" alt=""
-                      class="img-fluid"></a>
-                  <div class="text">
-                    <h3>Fur coat</h3>
-                    <p class="price">$143</p>
-                  </div>
-                </div>
-                <!-- /.product-->
-              </div>
-            </div>
+
           </div>
           <!-- /.col-md-9-->
         </div>
@@ -498,33 +272,33 @@
   <div id="footer">
     <div class="container">
       <div class="row">
-       
+
         <!-- /.col-lg-3-->
-       
+
         <!-- /.col-lg-3-->
         <div class="col-lg-6 col-md-6">
           <h4 class="mb-3">Where to find us</h4>
-          <p><strong>ShoppingZilla Ltd.</strong><br>13/25 New Avenue<br>New Heaven<br>45Y
-            73J<br>England<br><strong>Great Britain</strong></p><a href="#">Go to contact page</a>
+          <p><strong>ShoppingZilla Ltd.</strong><br>Duo City<br>#40<br>45Y
+            73J<br>India<br><strong>Electronic City</strong></p><a href="contact">Go to contact page</a>
           <hr class="d-block d-md-none">
         </div>
         <!-- /.col-lg-3-->
         <div class="col-lg-6 col-md-6">
           <h4 class="mb-3">Get the news</h4>
-          <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-            egestas.</p>
-          <form>
+          <p class="text-muted">Subscribe to get the latest product news</p>
+          <form action="newsEmail" method="post">
             <div class="input-group">
-              <input type="text" class="form-control"><span class="input-group-append">
-                <button type="button" class="btn btn-outline-secondary">Subscribe!</button></span>
+              <input name="newEmail" type="email" class="form-control"><span class="input-group-append">
+                <button type="submit" class="btn btn-outline-secondary">Subscribe!</button></span>
             </div>
             <!-- /input-group-->
           </form>
           <hr>
           <h4 class="mb-3">Stay in touch</h4>
-          <p class="social"><a href="#" class="facebook external"><i class="fa fa-facebook"></i></a><a href="#"
-              class="twitter external"><i class="fa fa-twitter"></i></a><a href="#" class="instagram external"><i
-                class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
+          <p class="social"><a href="https://www.facebook.com/anurag.ar.908?mibextid=ZbWKwL"
+              class="facebook external"><i class="fa fa-facebook"></i></a><a href="#" class="twitter external"><i
+                class="fa fa-twitter"></i></a><a href="https://www.instagram.com/anurag96ar/"
+              class="instagram external"><i class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
                 class="fa fa-google-plus"></i></a><a href="#" class="email external"><i class="fa fa-envelope"></i></a>
           </p>
         </div>

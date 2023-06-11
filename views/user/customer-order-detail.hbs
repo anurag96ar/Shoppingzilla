@@ -38,12 +38,17 @@
     <div id="top">
       <div class="container">
         <div class="row">
-    
+
           <div class="col-lg-12 text-center text-lg-right">
             <ul class="menu list-inline mb-0">
+              {{#if isLoggedIn}}
+              <div></div> {{else}}
               <li class="list-inline-item"><a href="loginPage">Register | Login</a></li>
+
+
+              {{/if}}
               <li class="list-inline-item"><a href="contact">Contact</a></li>
-             
+
             </ul>
           </div>
         </div>
@@ -224,10 +229,10 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Product Image</th>
-                      <th>Product Name</th>
+                      <th>Product</th>
+                      <th></th>
                       <th>Quantity</th>
-                      <th>Unit price</th>
+                      <th>price</th>
                       <th>Discount</th>
                       <th>Total</th>
                     </tr>
@@ -266,8 +271,14 @@
                 <div class="row addresses justify-content-center">
 
                   <div class="col-lg-12">
-
-                    <h3>Shipping address</h3>
+                    <h4>Payment Detail</h4>
+                    <hr>
+                    <p>Mode of Payment: <strong> {{data.paymentMode}}</strong><br><b>{{#if_equal  data.paymentMode "COD"}} {{else}} TxnID:{{/if_equal}}</b>
+                      {{data.paymentId}}<br> 
+                    </p>
+                        <hr>
+                    <h4>Shipping address</h4>
+                        <hr>
                     <p>Receiver Name: <strong> {{data.address.receiverName}}</strong><br>
                       {{data.address.completeAddress}}<br> <b>LandMark :</b> {{data.address.landMark}}
                     </p>
@@ -301,35 +312,36 @@
     <div id="footer">
       <div class="container">
         <div class="row">
-        
+
           <!-- /.col-lg-3-->
-         
+
           <!-- /.col-lg-3-->
           <div class="col-lg-6 col-md-6">
             <h4 class="mb-3">Where to find us</h4>
-            <p><strong>Obaju Ltd.</strong><br>13/25 New Avenue<br>New Heaven<br>45Y 73J<br>England<br><strong>Great
-                Britain</strong></p><a href="contact">Go to contact page</a>
+            <p><strong>ShoppingZilla Ltd.</strong><br>Duo City<br>#40<br>45Y
+              73J<br>India<br><strong>Electronic City</strong></p><a href="contact">Go to contact page</a>
             <hr class="d-block d-md-none">
           </div>
           <!-- /.col-lg-3-->
           <div class="col-lg-6 col-md-6">
             <h4 class="mb-3">Get the news</h4>
-            <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-              egestas.</p>
-            <form>
+            <p class="text-muted">Subscribe to get the latest product news</p>
+            <form action="newsEmail" method="post">
               <div class="input-group">
-                <input type="text" class="form-control"><span class="input-group-append">
-                  <button type="button" class="btn btn-outline-secondary">Subscribe!</button></span>
+                <input name="newEmail" type="email" class="form-control"><span class="input-group-append">
+                  <button type="submit" class="btn btn-outline-secondary">Subscribe!</button></span>
               </div>
               <!-- /input-group-->
             </form>
             <hr>
             <h4 class="mb-3">Stay in touch</h4>
-            <p class="social"><a href="#" class="facebook external"><i class="fa fa-facebook"></i></a><a href="#"
-                class="twitter external"><i class="fa fa-twitter"></i></a><a href="#" class="instagram external"><i
-                  class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
+            <p class="social"><a href="https://www.facebook.com/anurag.ar.908?mibextid=ZbWKwL"
+                class="facebook external"><i class="fa fa-facebook"></i></a><a href="#" class="twitter external"><i
+                  class="fa fa-twitter"></i></a><a href="https://www.instagram.com/anurag96ar/"
+                class="instagram external"><i class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
                   class="fa fa-google-plus"></i></a><a href="#" class="email external"><i
-                  class="fa fa-envelope"></i></a></p>
+                  class="fa fa-envelope"></i></a>
+            </p>
           </div>
           <!-- /.col-lg-3-->
         </div>
