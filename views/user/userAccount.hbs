@@ -201,6 +201,7 @@
               <div class="card-body">
                 <ul class="nav nav-pills flex-column">
                   <a href="yourOrders" class="nav-link "><i class="fa fa-list"></i> My orders</a>
+                     <a href="yourWallet" class="nav-link "><i class="fa fa-money"></i> Wallet</a>
                   {{!-- <a href="yourOrders" class="nav-link">
                     <i class="fa fa-heart"></i> My wishlist</a><a href="customer-account.html" class="nav-link"><i
                       class="fa fa-user"></i> My account</a><a href="index.html" class="nav-link"><i
@@ -228,6 +229,15 @@
           </div>
           <div class="col-lg-9">
             <div class="box">
+              <div class="row justify-content-center">
+              <img src="/wallet.jpeg" width="20%"/>
+              <div>
+               <h2>Wallet Amount</h2>
+                 <h2 style="color:green">+ ₹ {{wallet.totalAmount}} Left</h2>
+                     <h2 style="color:red">- ₹ {{wallet.spentAmount}} Spent</h2>
+                 </div>
+             </div>
+               <br>
               <h1>My account</h1>
               <p class="lead">Change your personal details or your password here.</p>
               <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
@@ -262,7 +272,7 @@
                 </div>
               </form>
               <h3 class="mt-5">Personal details</h3>
-              <form action="updateMob" method="post" onsubmit="return validateForm()">
+              <form id="register"  action="updateMob" method="post" onsubmit="return validateForm()">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -395,12 +405,17 @@
   
   <!-- *** COPYRIGHT END ***-->
   <!-- JavaScript files-->
-  <script src="/userHome/vendor/jquery/jquery.min.js"></script>
+  
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" ></script>
+  
   <script src="/userHome/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/userHome/vendor/jquery.cookie/jquery.cookie.js"> </script>
   <script src="/userHome/vendor/owl.carousel/owl.carousel.min.js"></script>
   <script src="/userHome/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.js"></script>
   <script src="/userHome/js/front.js"></script>
+   <script src="/userHome/js/validation2.js"></script>
   <script>
 
 function validateMobileNumber() {

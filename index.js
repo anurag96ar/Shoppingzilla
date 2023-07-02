@@ -1,11 +1,12 @@
 const express = require('express')
 const path = require('path')
 const nodemailer = require('nodemailer')
+const flash = require('express-flash')
 const Razorpay = require('razorpay');
 // const dbConnect = require('./config/dbConnect')
 const connectDB = require("./config/dbConnect");
 const app = express()
-const dotenv = require('dotenv').config()
+require('dotenv').config()
 const PORT = process.env.PORT || 4000
 const authRouter = require('./routes/authRoute')
 const productRouter = require("./routes/productRoute");
@@ -16,6 +17,8 @@ const cookieParser = require('cookie-parser')
 // const morgan = require('morgan');
 const { getAllProduct, getaProduct } = require('./controller/productCtrl');
 const Category = require("./models/category");
+
+const Banner = require("./models/banner");
 const SubCategory = require("./models/sub_category");
 const User = require("./models/userModel");
 const Product = require("./models/productModel");
@@ -36,6 +39,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+app.use(flash());
 
 // load static assets
 app.use('/', express.static(path.join(__dirname, 'public')))
@@ -88,23 +92,49 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', express.static(path.join(__dirname, 'public')))
 
+
+
 const Handlebars = require('handlebars');
-Handlebars.registerHelper('gt', function(a, b, options) {
-  if (a > b) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
-});
+
+
 const hbs = require('hbs');
 app.set('view engine', 'hbs')
-hbs.registerHelper('if_equal', function(a, b, opts) {
+hbs.registerHelper('if_equal', function (a, b, opts) {
   if (a == b) {
-      return opts.fn(this)
+    return opts.fn(this)
   } else {
-      return opts.inverse(this)
+    return opts.inverse(this)
   }
 });
-app.use('/api/user/', authRouter)
+
+
+hbs.registerHelper('isNegative', function(value, options) {
+  if (value < 0) {
+    return options.fn(this);  // Render the content within the {{#isNegative}} block
+  } else {
+    return options.inverse(this);  // Render the content within the {{else}} block
+  }
+});
+
+hbs.registerHelper('gt', function (a, b, opts) {
+  if (a > b) {
+    return opts.fn(this);
+  }
+  else {
+
+  }
+});
+
+hbs.registerHelper('if_lt', function (a, b, opts) {
+  if (a < b) {
+    return opts.fn(this);
+  } else {
+    return opts.inverse(this);
+  }
+});
+
+
+app.use('/api/user/',authRouter)
 app.use("/api/product", productRouter);
 app.use('/admin', adminRouter);
 
@@ -201,38 +231,144 @@ app.post('/uploadProduct', upload.array('files', 5), (req, res) => {
 
 });
 
+app.post('/uploadBanner', upload.array('files', 3), (req, res) => {
+
+  // Access the form fields via req.body and the uploaded files via req.files array
+  const title = req.body.title;
+  const slug = '';
+
+  let images = [];
+  //  console.log(JSON.stringify(req.files))
+
+  var fileData = JSON.stringify(req.files)
+  fileData = JSON.parse(fileData);
+
+  // console.log(fileData)
+  for (let i = 0; i < fileData.length; i++) {
+    // console.log(files[i]['path'])
+    // console.log(files[i].fieldname);
+    var data = { type: i == 0 ? "back" : "front", image: fileData[i].filename };
+
+    images.push(data);
+  }
+  const bannerData = {
+    slug,
+    title,
+    images,
+  };
+  //  console.log(productData);
+  Banner.create(bannerData).then((data, err) => {
+    if (err) res.status(StatusCodes.BAD_REQUEST).json({ err });
+    else {
+      // session.isLoggedIn = true;
+      res.redirect('admin/banner');
+    }
+  });
+
+  // Process the form data and uploaded files as needed
+  // Save file information to database, associate with name and email, etc.
+
+});
+
+
+app.post('/updateProduct', upload.array('files', 5), async (req, res) => {
+
+
+  const id = req.query.id;
+  
+  // Access the form fields via req.body and the uploaded files via req.files array
+  const title = req.body.title;
+  const description = req.body.about;
+  const price = req.body.price;
+  const brand = req.body.brand;
+  const category = req.body.category;
+  const sub_category = req.body.sub_category;
+  const product_sub_category = req.body.product_sub_category;
+  const slug = '';
+  const quantity = req.body.quantity;
+  let images = [];
+  //  console.log(JSON.stringify(req.files))
+
+  var fileData = JSON.stringify(req.files)
+  fileData = JSON.parse(fileData);
+
+  // console.log(fileData)
+  for (let i = 0; i < fileData.length; i++) {
+    // console.log(files[i]['path'])
+    // console.log(files[i].fieldname);
+    var data = { type: i == 0 ? "back" : "front", image: fileData[i].filename };
+
+    images.push(data);
+
+  }
+  var findProductforImages = await Product.findOne({ _id: new ObjectId(id) })
+  console.log(findProductforImages);
+  if (findProductforImages.images.length > 0) {
+    for (let i = 0; i < findProductforImages.images.length; i++) {
+      var data = { type: i == 0 ? "back" : "front", image: findProductforImages.images[i].image };
+      images.push(data);
+    }
+  }
+  const productData = {
+    slug,
+    title,
+    description,
+    price,
+    brand,
+    category,
+
+    images,
+    quantity
+  };
+  //  console.log(productData);
+  Product.findOneAndUpdate({ _id: id }, productData).then((data, err) => {
+    if (err) res.status(StatusCodes.BAD_REQUEST).json({ err });
+    else {
+      // session.isLoggedIn = true;
+      console.log(data)
+      res.redirect('admin/productList');
+    }
+  });
+
+  // Process the form data and uploaded files as needed
+  // Save file information to database, associate with name and email, etc.
+
+
+});
+
 app.post('/createSubCategoryAPI', async (req, res) => {
   try {
     let myobj = new Array();
 
-  
+
     // Retrieve subcategories based on the selected subcategory ID
+
+    // myobj.push(subcategory.data);
+    var data;
+    if (req.body.subcategory.includes(',')) {
+      data = req.body.subcategory.split(",");
+    } else {
+      data = req.body.subcategory.split(",");
+    }
+    for (let i = 0; i < data.length; i++) {
+      var subCat = { "id": data.length + i.toString(), "type": data[i].toUpperCase() };
+      myobj.push(subCat);
+    }
   
-      // myobj.push(subcategory.data);
-      var data;
-      if (req.body.subcategory.includes(',')) {
-        data = req.body.subcategory.split(",");
-      } else {
-        data = req.body.subcategory.split(",");
-      }
-      for (let i = 0; i < data.length; i++) {
-        var subCat = { "id": data.length + i.toString(), "type": data[i] };
-     myobj.push(subCat);
-
-      }
-      console.log(myobj);
-      const filter = { _id:new ObjectId('6467be0b1343ecd88c358086') }; 
+    const filter = { _id: new ObjectId('6467be0b1343ecd88c358086') };
     //  const filter = { "subcategoryId": req.body.category.toString() };
-      const update = { $push: { "subcategory.$[elem].data": myobj } };
-      var response = await SubCategory.updateOne(filter, update, { arrayFilters: [{ "elem.subcategoryId": req.body.category }] });
-      console.log(response);
-
-      res.render('admin/index', { category: data[0].category });
-    
+    const update = { $push: { "subcategory.$[elem].data": myobj } };
+    var response = await SubCategory.updateOne(filter, update, { arrayFilters: [{ "elem.subcategoryId": req.body.category }] });
+    console.log(response);
+    res.redirect('admin/index');
   } catch (error) {
     console.log(error.message);
   }
+
 });
+
+
+
 app.use(notFound)
 app.use(errorHandler)
 app.listen(PORT, () => {

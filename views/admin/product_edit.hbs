@@ -20,12 +20,75 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="/admin-styles/images/favicon.png" />
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    .swal2-title {
+      position: relative;
+      max-width: 100%;
+      margin: 0;
+      padding: 0.8em 1em 0;
+      color: #222;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      text-transform: none;
+      word-wrap: break-word;
+    }
+
+    .swal2-styled.swal2-confirm {
+      border: 0;
+      border-radius: 0.25em;
+      background: initial;
+      background-color: #4fbfa8;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .swal2-styled {
+      margin: 0.3125em;
+      padding: 0.625em 1.1em;
+
+      box-shadow: 0 0 0 0px transparent;
+      font-weight: 500;
+    }
+
+    .swal2-styled.swal2-cancel {
+      border: 0;
+      border-radius: 0.25em;
+      background: initial;
+      background-color: #a2a4a6;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .swal2-popup {
+      display: none;
+      position: relative;
+      box-sizing: border-box;
+      grid-template-columns: minmax(0, 100%);
+      width: 20rem;
+      max-width: 40%;
+      padding-top: 15px;
+      padding-bottom: 15px;
+
+      border: none;
+      border-radius: 5px;
+      background: #fff;
+      color: #545454;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+  </style>
   <style>
     .image-preview {
       display: flex;
       flex-wrap: wrap;
     }
+
     .image-preview img {
       width: 100px;
       height: 100px;
@@ -33,6 +96,49 @@
       margin: 5px;
     }
   </style>
+  <script>
+
+
+
+    $(document).ready(function () {
+
+
+      // Delete row on delete button click
+      $(document).on("click", ".deleteImage", async function () {
+        const result = await Swal.fire({
+          title: 'Do you really want to delete this Image?',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+
+        })
+
+        if (result.value) {
+          debugger;
+          var dataId = '{{data._id}}';
+          var imageId = $(this).siblings('img').attr('value');
+          console.log(dataId);
+
+          fetch(`/admin/deleteProductImage?id=${dataId}&name=${imageId}`, {
+            method: 'GET',
+          })
+            .then(response => response.json())
+            .then(data => {
+              location.reload()
+            })
+            .catch(error => { console.error(error) });
+
+        } else {
+          event.stopPropagation();
+          event.preventDefault();
+        };
+
+        location.reload()
+      });
+
+
+
+    });
+  </script>
 </head>
 
 <body>
@@ -40,19 +146,20 @@
     <!-- partial:/admin-styles/partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="#"><img src="/admin-styles/images/logo-mini.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png" class="mr-2"
+            alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="#"><img src="/admin-styles/images/logo-mini.svg" alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
         </button>
-       
+
         <ul class="navbar-nav navbar-nav-right">
-         
+
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="/admin-styles/images/faces/face28.jpg" alt="profile"/>
+              <img src="/admin-styles/images/faces/face28.jpg" alt="profile" />
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <a class="dropdown-item">
@@ -65,10 +172,11 @@
               </a>
             </div>
           </li>
-         
-         
+
+
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
           <span class="icon-menu"></span>
         </button>
       </div>
@@ -81,8 +189,12 @@
         <div id="theme-settings" class="settings-panel">
           <i class="settings-close ti-close"></i>
           <p class="settings-heading">SIDEBAR SKINS</p>
-          <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
-          <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
           <p class="settings-heading mt-2">HEADER SKINS</p>
           <div class="color-tiles mx-0 px-4">
             <div class="tiles success"></div>
@@ -98,14 +210,17 @@
         <i class="settings-close ti-close"></i>
         <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+            <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab"
+              aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
+            <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab"
+              aria-controls="chats-section">CHATS</a>
           </li>
         </ul>
         <div class="tab-content" id="setting-content">
-          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
+          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel"
+            aria-labelledby="todo-section">
             <div class="add-items d-flex px-3 mb-0">
               <form class="form w-100">
                 <div class="form-group d-flex">
@@ -185,11 +300,13 @@
           <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
             <div class="d-flex align-items-center justify-content-between border-bottom">
               <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
-              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
+              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See
+                All</small>
             </div>
             <ul class="chat-list">
               <li class="list active">
-                <div class="profile"><img src="/admin-styles/images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face1.jpg" alt="image"><span
+                    class="online"></span></div>
                 <div class="info">
                   <p>Thomas Douglas</p>
                   <p>Available</p>
@@ -197,7 +314,8 @@
                 <small class="text-muted my-auto">19 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="/admin-styles/images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face2.jpg" alt="image"><span
+                    class="offline"></span></div>
                 <div class="info">
                   <div class="wrapper d-flex">
                     <p>Catherine</p>
@@ -208,7 +326,8 @@
                 <small class="text-muted my-auto">23 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="/admin-styles/images/faces/face3.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face3.jpg" alt="image"><span
+                    class="online"></span></div>
                 <div class="info">
                   <p>Daniel Russell</p>
                   <p>Available</p>
@@ -216,7 +335,8 @@
                 <small class="text-muted my-auto">14 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="/admin-styles/images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face4.jpg" alt="image"><span
+                    class="offline"></span></div>
                 <div class="info">
                   <p>James Richardson</p>
                   <p>Away</p>
@@ -224,7 +344,8 @@
                 <small class="text-muted my-auto">2 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="/admin-styles/images/faces/face5.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face5.jpg" alt="image"><span
+                    class="online"></span></div>
                 <div class="info">
                   <p>Madeline Kennedy</p>
                   <p>Available</p>
@@ -232,7 +353,8 @@
                 <small class="text-muted my-auto">5 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="/admin-styles/images/faces/face6.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile"><img src="/admin-styles/images/faces/face6.jpg" alt="image"><span
+                    class="online"></span></div>
                 <div class="info">
                   <p>Sarah Graves</p>
                   <p>Available</p>
@@ -255,119 +377,173 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="customer" >
+            <a class="nav-link" href="customer">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title">Customers</span>
               <i class="menu-arrow"></i>
             </a>
-           
+
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="/admin/createProduct" >
+            <a class="nav-link" href="/admin/createProduct">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title">Create Product</span>
               <i class="menu-arrow"></i>
             </a>
-           
+
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="productList" >
+            <a class="nav-link" href="productList">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title"> Product List</span>
               <i class="menu-arrow"></i>
             </a>
-           
+
           </li>
 
-           <li class="nav-item">
-            <a class="nav-link"  href="createSubCategory" >
+          <li class="nav-item">
+            <a class="nav-link" href="createSubCategory">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title">SubCategory</span>
               <i class="menu-arrow"></i>
-            </a>          
+            </a>
           </li>
-            <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="orderList">
               <i class="icon-head menu-icon"></i>
               <span class="menu-title">Order List</span>
               <i class="menu-arrow"></i>
             </a>
           </li>
-         
           <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
+            <a class="nav-link" href="bannerList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Banner</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
           </li>
-        
+          <li class="nav-item">
+            <a class="nav-link" href="banner">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Banner List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="createCoupon">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Coupon</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="CouponList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Coupon List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="requestList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Return Requests</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- partial -->
-      <div class="main-panel">        
+      <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-          
+
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Edit Product</h4>
-                  
-               
-                    <form class="forms-sample" action="updateProduct?id={{data._id}}" method="POST" >
+
+
+                  <form class="forms-sample" action="/updateProduct?id={{data._id}}" method="POST"
+                    enctype="multipart/form-data">
                     <div class="form-group">
-                      <label for="exampleInputName1">Product Name</label>
-                      <input type="text" class="form-control" id="title" name="title" placeholder="Name of Product" value="{{data.title}} ">
+                      <label for="exampleInputName1" id="objectId" value="{{data._id}}">Product Name</label>
+                      <input type="text" class="form-control" id="title" name="title" placeholder="Name of Product"
+                        value="{{data.title}} ">
                     </div>
                     <div class="form-group">
                       <label for="exampleTextarea1">Product Detail</label>
-                      <div id="editor" name="editorContent" style="height:250px "></div>
-                      <input name="about" type="hidden" >
+                      <div id="editor" name="editorContent" style="height:250px ">{{{data.description}}}</div>
+                      <input name="about" type="hidden">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail3">Price</label>
-                      <input type="text" class="form-control" id="price" name="price" placeholder="Total Amount of Product" value="{{data.price}} ">
+                      <input type="text" class="form-control" id="price" name="price"
+                        placeholder="Total Amount of Product" value="{{data.price}} ">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword4">Brand</label>
-                      <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand Name of Product" value="{{data.brand}} ">
+                      <input type="text" class="form-control" id="brand" name="brand"
+                        placeholder="Brand Name of Product" value="{{data.brand}} ">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword4">Quantity</label>
-                      <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Product quantity" value="{{data.quantity}} ">
+                      <input type="text" class="form-control" id="quantity" name="quantity"
+                        placeholder="Product quantity" value="{{data.quantity}} ">
                     </div>
                     <div class="form-group">
                       <label for="exampleSelectGender">Category</label>
-                        <select class="form-control" id="category" name="category">
-                          <option>{{data.category}} </option>
-                       
-                        </select>
+                      <select class="form-control" id="category" name="category">
+                        <option>{{data.category}} </option>
+
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Upload Product Images</label>
+                      <input type="file" name="images" class="file-upload-default">
+                      <div class="input-group col-xs-12">
+                        <input type="file" class="form-control file-upload-info" name="files" id="files"
+                          placeholder="Upload Image" multiple="multiple" max="5" accept="image/*"
+                          onchange="previewImages(event)">
+
+                        <!-- <span class="input-group-append">
+                          <button class=" btn btn-primary" type="button" >Upload</button>
+                        </span> -->
                       </div>
-                     
-                    
-                  
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
+
+
                     <br>
-                    <button type="Update" class="btn btn-primary mr-2"  onclick="myFunction()">Submit</button>
-                
+                    <button type="Update" class="btn btn-primary mr-2" onclick="myFunction()">Submit</button>
+
                   </form>
+                  <br><br>
+
+                  <label for="exampleSelectGender">Previous Images</label>
+                  <br><br>
+                  {{#each data.images}}
+                  <div class="img-pos">
+                    <span class="close deleteImage">&times;</span>
+                    <img src="/{{image}}" style=" width: 20%;" value="{{_id}}">
+
+                  </div>
+
+                  {{/each}}
                 </div>
               </div>
             </div>
-           
+
           </div>
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:/admin-styles/partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023.  All rights reserved ShoppingZilla.</span>
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023. All rights
+              reserved ShoppingZilla.</span>
           </div>
         </footer>
         <!-- partial -->
@@ -398,18 +574,19 @@
 
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script>
-  function myFunction() {
-        <!-- Here the class ql-editor is defined by quill js, we can access the inner html from here -->
-        var editor = document.getElementsByClassName('ql-editor')[0].innerHTML
-        var about = document.querySelector('input[name=about]');
-        about.value = editor
+    function myFunction() {
+      <!-- Here the class ql-editor is defined by quill js, we can access the inner html from here -->
+      var editor = document.getElementsByClassName('ql-editor')[0].innerHTML
+      var about = document.querySelector('input[name=about]');
+      about.value = editor
     };
 
     //Configuring quill
     var quill = new Quill('#editor', {
-        theme: 'snow'
+      theme: 'snow'
     });
-    quill.clipboard.dangerouslyPasteHTML("{{{data.description}}} ");
+    //    quill.root.innerHTML = ({{{data.description}}})
+    //  quill.clipboard.dangerouslyPasteHTML("{{data.description}}");
     function previewImages(event) {
       const fileInput = event.target;
       const imagePreview = document.getElementById('imagePreview');
@@ -430,8 +607,8 @@
     }
 
     /// sub category
-    </script>
- 
+  </script>
+
   <!-- End custom js for this page-->
 </body>
 

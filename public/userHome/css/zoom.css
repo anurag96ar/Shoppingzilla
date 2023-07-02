@@ -1,0 +1,25 @@
+/* elevatezoom CSS */
+.elevatezoom-container {
+    z-index: 9999;
+  }
+  
+  .elevatezoom-gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .elevatezoom-gallery .item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-right: 10px;
+  }
+  
+  .elevatezoom-gallery .item img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  

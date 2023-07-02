@@ -9,7 +9,7 @@ const addtocartSchema = new mongoose.Schema({
     product_id:{
         type:String,
         required:true,
-        unique:true,
+       
     },
     quantity:{
   type:Number,

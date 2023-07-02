@@ -1,11 +1,12 @@
 const express=require('express');
-const {newsUpdateEmail,deleteWishItem,addWishlist,getWishlist,placeOrderCard,paymentGateway,sendContactMail,contact,deleteAddress,updateAddress,editAddress,downloadInvoice,changePassword,updateMob,cancelOrder,orderDetails,yourOrders,success,placeAnOrder,addNewAddressDB,orderReview,addAddress, paymentMethod,checkout,productList,createUser,otp,verifyOtp,loadLogin,profile, addCart,loginUserCtrl,updateQuantity,homePage,deleteCartItem,getUserCart,emptyCart,getallUser,getaUser, deleteaUser,updatedUser, blockUser, unblockUser,handleRefreshToken, logout, sendMail } = require('../controller/userCtrl');
+const {checkBlockedUser,returnRequest,applyCouponPage,yourWallet,userWallet,newsUpdateEmail,deleteWishItem,addWishlist,getWishlist,placeOrderCard,paymentGateway,sendContactMail,contact,deleteAddress,updateAddress,editAddress,downloadInvoice,changePassword,updateMob,cancelOrder,orderDetails,yourOrders,success,placeAnOrder,addNewAddressDB,orderReview,addAddress, paymentMethod,checkout,productList,createUser,otp,verifyOtp,loadLogin,profile, addCart,loginUserCtrl,updateQuantity,homePage,deleteCartItem,getUserCart,emptyCart,getallUser,getaUser, deleteaUser,updatedUser, blockUser, unblockUser,handleRefreshToken, logout, sendMail } = require('../controller/userCtrl');
 
 // const {isAdmin} = require('../middlewares/authMiddleware');
 const router=express.Router();
 router.post("/register",createUser)
+router.get("/returnRequest",returnRequest)
 router.get("/otp",otp)
-router.get("/profile",profile)
+router.get("/profile",checkBlockedUser,profile)
 router.post("/otp",verifyOtp)
 router.get("/loginpage",loadLogin)
 // router.post("/usercart", userCart);
@@ -49,6 +50,9 @@ router.get('/wishlist',getWishlist)
 router.get('/addWishlist',addWishlist)
 router.delete("/deleteWishlistItem",deleteWishItem) 
 router.post('/newsEmail',newsUpdateEmail)
+router.post('/userWallet',userWallet)
+router.get('/yourWallet',yourWallet)
+router.get('/applyCouponPage',applyCouponPage)
 
 
 

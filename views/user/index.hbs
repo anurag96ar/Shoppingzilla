@@ -190,6 +190,16 @@
         -->
       <div id="advantages">
         <div class="container">
+
+           <form action="category?type=All&search=true" method="get" >
+              <div class="input-group">
+                <input type="text" placeholder="Search" class="form-control" name="search">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+            <br>
           <div class="row mb-4">
             <div class="col-md-4">
               <div class="box clickable d-flex flex-column justify-content-center mb-0 h-100">
@@ -239,13 +249,15 @@
           <h3>Get Inspired</h3>
           <p class="lead">Get the inspiration from our world class designers</p>
           <div id="get-inspired" class="owl-carousel owl-theme">
-            <div class="item"><a href="#"><img src="/userHome/img/getinspired1.jpg" alt="Get inspired"
+            {{#each bannerImages.images}}
+            <div class="item"><a href="category?id={{id}}&type=All&categoryId={{../categoryId}}"><img src="/{{image}}" alt="Get inspired"
                   class="img-fluid"></a></div>
-            <div class="item"><a href="#"><img src="/userHome/img/getinspired2.jpg" alt="Get inspired"
+                  {{/each}}
+            {{!-- <div class="item"><a href="#"><img src="/userHome/img/getinspired2.jpg" alt="Get inspired"
                   class="img-fluid"></a></div>
             <div class="item"><a href="#"><img src="/userHome/img/getinspired3.jpg" alt="Get inspired"
                   class="img-fluid"></a></div>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>

@@ -293,6 +293,41 @@
               <i class="menu-arrow"></i>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="bannerList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Banner</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banner">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Banner List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="createCoupon">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Coupon</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="CouponList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Coupon List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="requestList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Return Requests</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
@@ -368,19 +403,7 @@
               </ul>
             </div>
           </li> -->
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
+          
         
         </ul>
       </nav>
@@ -407,7 +430,7 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail3">Price</label>
-                      <input type="text" class="form-control" id="price" name="price" placeholder="Total Amount of Product">
+                      <input  type="text" class="form-control" id="price" name="price" placeholder="Total Amount of Product" onchange="validateInput(this)">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword4">Brand</label>
@@ -566,6 +589,22 @@
     }
   }
   </script>
+
+  <script>
+  function validateInput(inputElement) {
+    const numberInput = inputElement.value;
+
+    if (numberInput < 0) {
+      
+      document.querySelector('#price').value = 100 ;
+      // Perform additional actions if needed (e.g., show an error message)
+    } else {
+      document.querySelector('#price').value = numberInput ;
+      console.log('Input is valid.');
+      // Perform additional actions if needed
+    }
+  }
+</script>
  
   <!-- End custom js for this page-->
 </body>

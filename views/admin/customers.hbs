@@ -17,17 +17,90 @@
     <link rel="stylesheet" href="/admin-styles/css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/admin-styles/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        .swal2-title {
+            position: relative;
+            max-width: 100%;
+            margin: 0;
+            padding: 0.8em 1em 0;
+            color: #222;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: none;
+            word-wrap: break-word;
+        }
+
+        .swal2-styled.swal2-confirm {
+            border: 0;
+            border-radius: 0.25em;
+            background: initial;
+            background-color: #4fbfa8;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .swal2-styled {
+            margin: 0.3125em;
+            padding: 0.625em 1.1em;
+
+            box-shadow: 0 0 0 0px transparent;
+            font-weight: 500;
+        }
+
+        .swal2-styled.swal2-cancel {
+            border: 0;
+            border-radius: 0.25em;
+            background: initial;
+            background-color: #a2a4a6;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .swal2-popup {
+            display: none;
+            position: relative;
+            box-sizing: border-box;
+            grid-template-columns: minmax(0, 100%);
+            width: 20rem;
+            max-width: 40%;
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            color: #545454;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+    </style>
+    <style>
+        .page-range {
+            color: blue;
+            background-color: lightgray;
+            /* Add your desired styles for the range "1-10" */
+        }
+    </style>
     <script>
 
         $(document).ready(function () {
 
 
-
-
             // Delete row on delete button click
-            $(document).on("click", ".delete", function () {
-                if (confirm('Do you really want to delete this user ?')) {
+            $(document).on("click", ".delete", async function () {
+                const result = await Swal.fire({
+                    title: 'Do you want to delete the User?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+
+                })
+
+                if (result.value) {
                     $(this).parents("tr").remove();
                     debugger;
                     var dataId = $(this).parents("tr").find('td').eq(1).html();
@@ -91,10 +164,10 @@
         <!-- partial:/admin-styles/partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="#"><img
-                        src="/admin-styles/images/logo.png" class="mr-2" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="#"><img
-                        src="/admin-styles/images/logo-mini.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo mr-5" href="#"><img src="/admin-styles/images/logo.png" class="mr-2"
+                        alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="#"><img src="/admin-styles/images/logo-mini.svg"
+                        alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -378,6 +451,41 @@
                             <i class="menu-arrow"></i>
                         </a>
                     </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="bannerList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title"> Create Banner</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banner">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Banner List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="createCoupon">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Coupon</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="CouponList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Coupon List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="requestList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Return Requests</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
                     <!-- <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                       <i class="icon-layout menu-icon"></i>
@@ -453,22 +561,7 @@
                       </ul>
                     </div>
                   </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false"
-                            aria-controls="error">
-                            <i class="icon-ban menu-icon"></i>
-                            <span class="menu-title">Error pages</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="collapse" id="error">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a>
-                                </li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                   
 
                 </ul>
             </nav>
@@ -540,22 +633,22 @@
                                     <br><br>
                                     <div class="row">
                                         <div class="col-lg-9"></div>
-                                         <div class="col-lg-3">
-                                        <ul class="pagination">
-                                            {{!-- {{#if (gt totalPages 1)}}
-                                            {{#if (gt currentPage 1)}} --}}
-                                            <li><a href="?page={{currentPage}}&pre=true&next=false"
-                                                    class="badge badge-primary" style="width: 100px;">Previous</a></li>
-                                            {{!-- {{/if}} --}}
+                                        <div class="col-lg-3">
+                                            <ul class="pagination">
+                                                <li><a href="?page={{currentPage}}&pre=true&next=false"
+                                                        class="badge badge-primary" style="width: 100px;">Previous</a>
+                                                </li>
+                                                &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <li>Page {{currentPage}} <span class="page-range">1-10</span></li>
+                                                {{#if disableNext}}
+                                                <li><span class="badge badge-primary"
+                                                        style="width: 100px; cursor: not-allowed;">Next</span></li>
+                                                {{else}}
+                                                <li><a href="?page={{currentPage}}&pre=false&next=true"
+                                                        class="badge badge-primary" style="width: 100px;">Next</a></li>
+                                                {{/if}}
+                                            </ul>
 
-                                            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                            {{!-- {{#if (lt currentPage totalPages)}} --}}
-                                            <li><a href="?page={{currentPage}}&pre=false&next=true"
-                                                    class="badge badge-primary" style="width: 100px;"> Next </a></li>
-                                            {{!-- {{/if}} --}}
-                                            {{!-- {{/if}} --}}
-                                        </ul>
                                         </div>
                                     </div>
                                 </div>

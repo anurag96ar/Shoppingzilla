@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="/admin-styles/css/vertical-layout-light/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/admin-styles/images/favicon.png" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     // Disable the back button
     // window.history.forward();
@@ -36,6 +37,17 @@
 
 
   </script>
+  <style>
+    .btn-lg-bold {
+      font-weight: bold;
+    }
+
+    .btn-middle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -312,6 +324,42 @@
               <i class="menu-arrow"></i>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="bannerList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Banner</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banner">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Banner List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="createCoupon">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Coupon</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            
+            <a class="nav-link" href="CouponList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Coupon List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="requestList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Return Requests</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
@@ -388,26 +436,14 @@
             </div>
           </li> -->
 
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="#"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
+         
 
         </ul>
       </nav>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
- <div class="row">
+          <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
@@ -420,48 +456,48 @@
               </div>
             </div>
           </div>
-           <div class="col-md-12 grid-margin transparent ">
-              <div class="row">
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-tale">
-                    <div class="card-body">
-                      <p class="mb-4">Today’s Bookings</p>
-                      <p class="fs-30 mb-2">{{todayBooking}}</p>
+          <div class="col-md-12 grid-margin transparent ">
+            <div class="row">
+              <div class="col-md-3 mb-4 stretch-card transparent">
+                <div class="card card-tale">
+                  <div class="card-body">
+                    <p class="mb-4">Today’s Bookings</p>
+                    <p class="fs-30 mb-2">{{todayBooking}}</p>
 
-                    </div>
                   </div>
                 </div>
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-dark-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Total Bookings</p>
-                      <p class="fs-30 mb-2">{{totalBooking}}</p>
+              </div>
+              <div class="col-md-3 mb-4 stretch-card transparent">
+                <div class="card card-dark-blue">
+                  <div class="card-body">
+                    <p class="mb-4">Total Bookings</p>
+                    <p class="fs-30 mb-2">{{totalBooking}}</p>
 
-                    </div>
                   </div>
                 </div>
-             
-                <div class="col-md-3 mb-4  stretch-card transparent">
-                  <div class="card card-light-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Cancelled Order</p>
-                      <p class="fs-30 mb-2">{{cancelled}}</p>
+              </div>
 
-                    </div>
+              <div class="col-md-3 mb-4  stretch-card transparent">
+                <div class="card card-light-blue">
+                  <div class="card-body">
+                    <p class="mb-4">Cancelled Order</p>
+                    <p class="fs-30 mb-2">{{cancelled}}</p>
+
                   </div>
                 </div>
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-light-danger">
-                    <div class="card-body">
-                      <p class="mb-4">Number of Clients</p>
-                      <p class="fs-30 mb-2">{{totalCustomer}}</p>
+              </div>
+              <div class="col-md-3 mb-4 stretch-card transparent">
+                <div class="card card-light-danger">
+                  <div class="card-body">
+                    <p class="mb-4">Number of Customters</p>
+                    <p class="fs-30 mb-2">{{totalCustomer}}</p>
 
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-         
+          </div>
+
           <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card tale-bg">
@@ -481,28 +517,83 @@
                 </div>
               </div>
             </div>
-           <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
-                     <div class="card-body">
-                <div class="card-people mt-auto">
-                  <h4 class="card-title">Customer Chart</h4>
-                  <div>
-                  <canvas id="myChart" style="height:250px;"></canvas></div>
-                 </div>
+                <div class="card-body">
+                  <div class="card-people mt-auto">
+                    <h4 class="card-title">Customer Chart</h4>
+                    <div>
+                      <canvas id="myChart" style="height:250px;"></canvas>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
 
-           
+
+            <div class="col-lg-12 grid-margin">
+              <div class="col-lg-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Sales Chart</h4>
+                    <div class="d-flex justify-content-end mb-3">
+
+                    </div>
+                    <div>
+                      <canvas id="areaChart" style="height: 300px;"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="row">
             <div class="col-lg-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Sales Chart</h4>
-                  <div>
-                    <canvas id="areaChart" style="height: 300px;"></canvas>
+                  <h4 class="card-title">Download Sales Report</h4>
+                  <div class="form-group">
+                    <label for="interval" class="font-weight-bold">Select Interval:</label>
+                    <div class="d-flex justify-content-center">
+                      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary btn-lg btn-lg-bold btn-middle" style="height: 30px;">
+                          <input type="radio" name="interval" id="dateWise" value="dateWise" checked> Date-wise
+                        </label>
+                        <label class="btn btn-secondary btn-lg btn-lg-bold btn-middle" style="height: 30px;">
+                          <input type="radio" name="interval" id="monthWise" value="monthWise"> Month-wise
+                        </label>
+                        <label class="btn btn-secondary btn-lg btn-lg-bold btn-middle" style="height: 30px;">
+                          <input type="radio" name="interval" id="yearWise" value="yearWise"> Year-wise
+                        </label>
+                      </div>
+                    </div>
                   </div>
+               <form method="POST" action="/admin/dayWiseReport">
+                  <div id="datePickerContainer" class="form-group">
+                    <label for="reportDate">Select Date:</label>
+                    <input type="date" class="form-control" id="reportDate" name="reportDate">
+                  </div>
+
+                  <div id="monthPickerContainer" class="form-group" style="display: none;">
+                    <label for="reportMonth">Select Month:</label>
+                    <input type="month" class="form-control" id="reportMonth" name="reportMonth">
+                  </div>
+
+                  <div id="yearPickerContainer" class="form-group" style="display: none;">
+                    <label for="reportYear">Select Year:</label>
+                    <input type="number" class="form-control" id="reportYear" name="reportYear" min="2021"
+                      placeholder="2021">
+                  </div>
+
+                  <div class="d-flex justify-content-center mb-3">
+                    <button class="btn btn-primary btn-lg btn-lg-bold btn-middle " id="downloadReportBtn" type="submit"
+                      style="height: 30px;">Download Sales Report</button>
+                  </div>
+             </form>
                 </div>
               </div>
             </div>
@@ -593,36 +684,71 @@
           labels: ["2021", "2022", "2023",],
           datasets: [{
             label: 'Cancelled Order',
-            data: [{{cancelledData}}],
-            borderColor: ['rgba(255, 99, 132, 0.5)'],
-            backgroundColor: ['rgba(255, 99, 132, 0.5)'],
-            borderWidth: 5,
-            fill: true
-          },
+            data: [{{ cancelledData }}],
+          borderColor: ['rgba(255, 99, 132, 0.5)'],
+          backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+          borderWidth: 5,
+          fill: true
+        },
           {
-            label: 'Delivered Successfully Order',
-            data: [{{delivered}}],
-            borderColor: ['rgba(15, 252, 3,0.5)'],
-            backgroundColor: ['rgba(15, 252, 3,0.5)'],
-            borderWidth: 5,
-            fill: true
+          label: 'Delivered Successfully Order',
+          data: [{{ delivered }}],
+        borderColor: ['rgba(15, 252, 3,0.5)'],
+        backgroundColor: ['rgba(15, 252, 3,0.5)'],
+        borderWidth: 5,
+        fill: true
           },
-          {
-            label: 'Order Placed ',
-            data:[{{placed}}],
-            borderColor: ['rgba(8, 102, 196, 0.5)'],
-            backgroundColor: ['rgba(8, 102, 196, 0.8)'],
-            borderWidth: 5,
-            fill: true
+      {
+        label: 'Order Placed ',
+        data: [{{ placed }}],
+      borderColor: ['rgba(8, 102, 196, 0.5)'],
+      backgroundColor: ['rgba(8, 102, 196, 0.8)'],
+      borderWidth: 5,
+      fill: true
           }
           ]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false
+      options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+      });
+    });
+
+    var selectedValue = '';
+    $(document).ready(function () {
+      $('input[name="interval"]').change(function () {
+        selectedValue = $(this).val();
+        if (selectedValue === 'dateWise') {
+          $('#datePickerContainer').show();
+          $('#monthPickerContainer').hide();
+          $('#yearPickerContainer').hide();
+        } else if (selectedValue === 'monthWise') {
+          $('#datePickerContainer').hide();
+          $('#monthPickerContainer').show();
+          $('#yearPickerContainer').hide();
+        } else if (selectedValue === 'yearWise') {
+          $('#datePickerContainer').hide();
+          $('#monthPickerContainer').hide();
+          $('#yearPickerContainer').show();
         }
       });
     });
+  //  $(document).on("click", "#downloadReportBtn", async function () {
+   //   debugger;
+   //   console.log(selectedValue)
+   //   var reportDate = document.getElementById('reportDate');
+
+      // Read the value from the input element
+   //   var monthDate = reportDate.value;
+   //   fetch(`dayWiseReport?date=${monthDate}`, {
+       // method: 'GET',
+    //  })
+       
+
+   // });
+
+
   </script>
 
 

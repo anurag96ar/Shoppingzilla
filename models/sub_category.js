@@ -5,7 +5,8 @@ const subcategorySchema = new mongoose.Schema({
   data: [
     {
       id: { type: String },
-      type: { type: String }
+      type: { type: String,
+        unique: true }
     }
   ]
 },{collection:'subcategories'});

@@ -355,6 +355,41 @@
               <i class="menu-arrow"></i>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="bannerList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Banner</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banner">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Banner List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="createCoupon">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Create Coupon</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="CouponList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Coupon List</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="requestList">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Return Requests</span>
+              <i class="menu-arrow"></i>
+            </a>
+          </li>
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
@@ -431,19 +466,7 @@
               </ul>
             </div>
           </li> -->
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
+         
 
         </ul>
       </nav>
@@ -458,7 +481,7 @@
                   <h3>Order Details</h3>
                   <hr>
                   <br>
-                  <h5><strong>OrderId</strong> {{data._id}}</h5>
+                  <h5><strong>OrderId</strong> {{data.orderId}}</h5>
                   <h6>Order was placed on <strong>{{data.placedDate}}</strong> and is currently
                     <strong>"{{data.paymentStatus}}"</strong>.
                   </h6>

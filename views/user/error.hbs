@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Error Page</title>
+  <style>
+    body {
+      background-color: #021a4b;
+      font-family: "Concert One", cursive;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .error-code {
+      font-size: 6em;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .error-message {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .error-description {
+      font-size: 1.5em;
+      max-width: 600px;
+      text-align: center;
+    }
+    .error-link {
+      margin-top: 20px;
+    }
+    .error-link a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .error-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <div class="error-message">Page Not Found</div>
+    <div class="error-description">The requested page could not be found on the server.</div>
+    <div class="error-link">
+      <a href="/">Go back to the homepage</a>
+    </div>
+  </div>
+</body>
+</html>

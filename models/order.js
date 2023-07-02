@@ -85,7 +85,8 @@ const productSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+
 });
 
 const addressSchema = new Schema({
@@ -158,6 +159,7 @@ const orderSchema = new Schema({
   },
   CancelDate: {
     type: Date,
+    default:Date.now(),
     get: function (value) {
       return value.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -169,6 +171,7 @@ const orderSchema = new Schema({
   },
   DeliveredDate: {
     type: Date,
+    
     get: function (value) {
       return value.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -177,6 +180,10 @@ const orderSchema = new Schema({
       });
     }
 
+  },
+  returnDate:{
+    type: Date,
+    default: Date.now
   },
   paymentStatus: {
     type: String,
@@ -191,7 +198,12 @@ const orderSchema = new Schema({
   },
   paymentId:{
     type:String
+  },
+  coupon:{
+    type:String,
+    default:""
   }
+
 });
 
 const Order = mongoose.model('Order', orderSchema);

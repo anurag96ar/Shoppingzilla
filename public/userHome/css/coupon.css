@@ -1,0 +1,14 @@
+.coupon-field {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .coupon-input {
+    width: 150px; /* Adjust the width as needed */
+    margin-right: 10px; /* Add spacing between the input field and the button */
+  }
+  
+  .coupon-button {
+    flex-shrink: 0; /* Prevent the button from shrinking */
+  }
+  
