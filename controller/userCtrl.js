@@ -117,9 +117,11 @@ const homePage = async (req, res) => {
 
     var bannerImages = await Banner.findOne({ title: "Homepage" });
     let isUserBlocked = await User.findOne({email:req.session.email})
+    if(isUserBlocked!=null){
     if(isUserBlocked.isBlocked){
       res.redirect("logout");
     }
+  
     else{
       res.render("user/index", {
         header: data,
@@ -128,6 +130,7 @@ const homePage = async (req, res) => {
         bannerImages: bannerImages,
       });
     }
+  }
    
   } catch (error) {
     console.log(error.message);
@@ -907,7 +910,6 @@ const placeAnOrder = async (req, res) => {
           user: req.session.email,
           totalAmount: parseInt(spent),
           spent: true
-
         }
         var walletHistory = await WalletHistory.create(walletHistory)
 
@@ -938,10 +940,12 @@ const success = async (req, res) => {
 
 const yourOrders = async (req, res) => {
   try {
+    const headerData = await nestedHeaderData();
     var orderPlacedData = await Order.find({ email: req.session.email }).sort({
       placedDate: -1,
     });
-    res.render("user/customer-orders", { data: orderPlacedData });
+    
+    res.render("user/customer-orders", { data: orderPlacedData,header:headerData });
   } catch (error) {
     res.render("user/error");
   }
@@ -986,6 +990,7 @@ const yourOrders = async (req, res) => {
 const orderDetails = async (req, res) => {
 
   try {
+    const headerData = await nestedHeaderData();
     let isDelivered = false
     var orderPlacedData = await Order.find({ _id: new ObjectId(req.query.id) });
 
@@ -1061,7 +1066,8 @@ const orderDetails = async (req, res) => {
       cancelled: cancelled,
       status: currentStatus,
       isDelivered:isDelivered,
-      returnStatus:returnStatus
+      returnStatus:returnStatus,
+      header:headerData
      
     });
   } catch (error) {
@@ -1486,8 +1492,8 @@ const userWallet = async (req, res) => {
 const yourWallet = async (req, res) => {
   try {
     var walletHistory = await WalletHistory.find({ user: req.session.email })
-
-    res.render("user/customer-wallet", { walletHistory });
+    const headerData = await nestedHeaderData();
+    res.render("user/customer-wallet", { walletHistory:walletHistory,header:headerData });
   } catch (error) {
     console.log(error.message);
   }
@@ -1510,13 +1516,12 @@ try{
 }
 
 const checkBlockedUser = async (req, res, next) => {
-
-
   let isUserBlocked = await User.findOne({email:req.session.email})
   console.log(isUserBlocked);
+  if(isUserBlocked!=null){
   if(isUserBlocked.isBlocked){
-
     return res.redirect('logout')
+  }
   }
  
   // User is not blocked, move to the next middleware or route handler

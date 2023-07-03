@@ -9,8 +9,10 @@ const SubCategory = require("../models/sub_category");
 const ReturnRequest = require("../models/return");
 const User = require("../models/userModel");
 const Banner = require("../models/banner");
+const Wallet = require("../models/wallet")
 const multer = require("multer");
 const Order = require("../models/order");
+const WalletHistory = require("../models/wallet_history")
 const { ObjectId, ReturnDocument } = require("mongodb");
 const axios = require("axios");
 const Razorpay = require("razorpay");
@@ -919,9 +921,27 @@ const formattedDate = currentDate.toLocaleDateString('en-US', { year: 'numeric',
 
 const requestList = async (req, res) => {
   try {
-   let data = await ReturnRequest.find({status:"Return Requested"}) 
+    let page;
+    if (req.query.pre === "true") {
+      page = parseInt(req.query.page) - 1 || 1;
+    } else {
+      page = parseInt(req.query.page) + 1 || 1;
+    }
+    const perPage = 10;
+    const totalOrders = await ReturnRequest.countDocuments();
 
-    res.render("admin/return_request", { data:data
+    const totalPages = Math.ceil(totalOrders / perPage);
+   let data = await ReturnRequest.find({status:"Return Requested"}) 
+   .skip((page - 1) * perPage)
+      .limit(perPage).sort({_id:-1});
+    const disableNext = totalOrders - perPage * page <= 0;
+    const hasMinimumData = totalOrders >= perPage;
+
+    res.render("admin/return_request", { data:data,
+      currentPage: page,
+      totalPages: totalPages,
+      disableNext: disableNext,
+      hasMinimumData: hasMinimumData,
      
     });
   } catch (error){
@@ -931,18 +951,36 @@ const requestList = async (req, res) => {
 
 const rejectApproved = async(req,res)=>{
   try{
+    console.log("change change change change");
     var changeStatus = await Order.findOneAndUpdate(
       { _id: req.query.id },
       { $set: { paymentStatus: req.query.status, returnDate: Date.now() } }
     );
+    console.log(changeStatus +"   status has been changed");
 let updateStatus = await ReturnRequest.findOneAndUpdate({ orderId: req.query.id },
   { $set: { status: req.query.status } })
     if (changeStatus.paymentMode == "CARD") {
-      initiateRefund(changeStatus.paymentId, changeStatus.totalAmount);
+  
+      initiateRefund(changeStatus.paymentId, changeStatus.cart.totalAmount);
+      
     }
+    else if(changeStatus.paymentMode == "WALLET"){
+      var wallet = await Wallet.findOne({ user: updateStatus.email, });
+       console.log(changeStatus.cart.totalAmount + "Total total total");
+        wallet.totalAmount += parseInt(changeStatus.cart.totalAmount);
+        var dataWallet = await Wallet.updateOne({ user: updateStatus.email },
+          { $set: { totalAmount: wallet.totalAmount} });
+          var walletHistory = {
+            user: updateStatus.email,
+            totalAmount: parseInt(changeStatus.cart.totalAmount),
+            spent: false
+          }
+          var walletHistory = await WalletHistory.create(walletHistory)
+    }
+    res.redirect("index")
   }
-  catch{
-
+  catch(error){
+console.log(error);
   }
 }
 

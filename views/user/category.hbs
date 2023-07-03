@@ -476,10 +476,14 @@
     <div class="col-lg-9"></div>
     <div class="col-lg-3">
       <ul class="pagination">
-        <li><a
+        {{#if_equal currentPage 1}}
+        <li><span class="badge badge-primary" style="width: 100px; cursor: not-allowed;">Previous</span></li>
+        {{else}}
+         <li><a
             href="category?value=-1&id={{id}}&categoryId={{categoryId}}&type={{category}}&page={{currentPage}}&pre=true&next=false"
-            class="badge badge-primary" style="width: 100px;{{#if_equal currentPage 1}} cursor: not-allowed;{{else}}{{/if_equal}}">Previous</a>
+            class="badge badge-primary" style="width: 100px;">Previous</a>
         </li>
+        {{/if_equal}}
         &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
         <li>Page {{currentPage}} <span class="page-range">1-10</span></li>
         {{#if disableNext}}
