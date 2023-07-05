@@ -272,16 +272,11 @@ const headerData = asyncHandler(async (req, res) => {
         });
       });
     });
-
+     
     // Redirect to another URL with the encoded data as a query parameter
     //res.redirect(`/homepage?data=${nestedData}`);
-    try {
-      // console.log(req.query.data);
+    
       res.redirect("homepage");
-    } catch (error) {
-      console.log(error.message);
-    }
-
     console.log(nestedData);
   } catch (error) {
     console.error("Error fetching data:", error);

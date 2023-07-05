@@ -39,7 +39,6 @@ const WalletHistory = require("../models/wallet_history")
 const Coupon = require("../models/coupon")
 
 
-
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const findUser = await User.findOne({ email: email });
@@ -110,6 +109,7 @@ const loadLogin = async (req, res) => {
 //Load homepage
 const homePage = async (req, res) => {
   try {
+    console.log("test tets test stetst");
     const isAuthenticated = req.user ? true : false;
     var data = await nestedHeaderData();
     var isLoggedIn = await isUserLoggedIn(req.session.email);
@@ -123,6 +123,7 @@ const homePage = async (req, res) => {
     }
   
     else{
+      console.log("Test test test test");
       res.render("user/index", {
         header: data,
         isLoggedIn: isLoggedIn,
@@ -160,6 +161,7 @@ const verifyOtp = async (req, res) => {
       // const model1Doc = await Category.findOne({});
       // const model2Docs = await SubCategory.find({});
       res.cookie("email", req.query.email);
+      req.session.email = req.body.email;
       headerData(req, res);
       //  res.redirect('homepage')
     } else {
