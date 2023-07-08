@@ -109,21 +109,28 @@ const loadLogin = async (req, res) => {
 //Load homepage
 const homePage = async (req, res) => {
   try {
-    console.log("test tets test stetst");
-    const isAuthenticated = req.user ? true : false;
     var data = await nestedHeaderData();
+
     var isLoggedIn = await isUserLoggedIn(req.session.email);
-    var cartCount = await addToCart.count({email:req.session.email});
+    var cartCount = await addToCart.count({ email: req.session.email });
 
     var bannerImages = await Banner.findOne({ title: "Homepage" });
-    let isUserBlocked = await User.findOne({email:req.session.email})
-    if(isUserBlocked!=null){
-    if(isUserBlocked.isBlocked){
-      res.redirect("logout");
-    }
-  
-    else{
-      console.log("Test test test test");
+    let isUserBlocked = await User.findOne({ email: req.session.email })
+    if (isUserBlocked != null) {
+      if (isUserBlocked.isBlocked) {
+        res.redirect("logout");
+      }
+
+      else {
+        console.log("Test test test test");
+        res.render("user/index", {
+          header: data,
+          isLoggedIn: isLoggedIn,
+          cartCount: cartCount,
+          bannerImages: bannerImages,
+        });
+      }
+    } else {
       res.render("user/index", {
         header: data,
         isLoggedIn: isLoggedIn,
@@ -131,10 +138,9 @@ const homePage = async (req, res) => {
         bannerImages: bannerImages,
       });
     }
-  }
-   
+
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -161,7 +167,7 @@ const verifyOtp = async (req, res) => {
       // const model1Doc = await Category.findOne({});
       // const model2Docs = await SubCategory.find({});
       res.cookie("email", req.query.email);
-      req.session.email = req.body.email;
+      req.session.email = req.query.email;
       headerData(req, res);
       //  res.redirect('homepage')
     } else {
@@ -785,7 +791,10 @@ const paymentMethod = async (req, res) => {
   try {
     let selectedAddress = req.body.selectedaddress;
 
-    res.render("user/checkout_paymentmode", { address: selectedAddress });
+    var wallet = await Wallet.find({ user: req.session.email })
+
+    console.log(wallet)
+    res.render("user/checkout_paymentmode", { address: selectedAddress, wallet: wallet });
   } catch (error) {
     res.render("user/error");
   }
@@ -856,7 +865,7 @@ async function getAddress(email) {
   let returnAddress;
   try {
     returnAddress = await AddAddress.find({ email: email });
-  } catch (error) {  res.render("user/error")}
+  } catch (error) { res.render("user/error") }
   return returnAddress;
 }
 async function getAddressById(id) {
@@ -884,6 +893,7 @@ const placeAnOrder = async (req, res) => {
     if (req.body.finalAmount != undefined) {
       getCustomerCart.totalAmount = parseInt(req.body.finalAmount);
     }
+    console.log("mode "+req.body.mode.trim());
     if (req.body.mode.trim() != "WALLET") {
       var placeOrder = await Order.create(placeOrderData);
       const data = req.query.dataId;
@@ -893,8 +903,9 @@ const placeAnOrder = async (req, res) => {
       });
       return res.send(placeOrder);
     } else {
-      var wallet = await Wallet.findOne({ user: req.session.email, });
+      var wallet = await Wallet.findOne({ user: req.session.email })
       var spent = parseInt(getCustomerCart.totalAmount);
+      console.log("spent amount "+spent);
       if (wallet.totalAmount >= spent) {
         var placeOrder = await Order.create(placeOrderData);
         const data = req.query.dataId;
@@ -946,8 +957,8 @@ const yourOrders = async (req, res) => {
     var orderPlacedData = await Order.find({ email: req.session.email }).sort({
       placedDate: -1,
     });
-    
-    res.render("user/customer-orders", { data: orderPlacedData,header:headerData });
+
+    res.render("user/customer-orders", { data: orderPlacedData, header: headerData });
   } catch (error) {
     res.render("user/error");
   }
@@ -1034,7 +1045,7 @@ const orderDetails = async (req, res) => {
         " ) ---> Delivererd on ( " +
         orderPlacedData[0].DeliveredDate +
         " ) ";
-    } else if(orderPlacedData[0].paymentStatus == "Request Approved and Amount Refunded"){
+    } else if (orderPlacedData[0].paymentStatus == "Request Approved and Amount Refunded") {
       currentStatus =
         "Order Placed on ( " +
         orderPlacedData[0].placedDate +
@@ -1046,31 +1057,31 @@ const orderDetails = async (req, res) => {
         orderPlacedData[0].DeliveredDate +
         " ) ---> Request Approved and Amount Refunded on ( " +
         orderPlacedData[0].returnDate
-         isDelivered = true
-    } 
-     else {
-      currentStatus =  "Order Placed on ( " +
-      orderPlacedData[0].placedDate +
-      " ) ---> Cancelled on ( " +
-      orderPlacedData[0].CancelDate +
-      " )"
+      isDelivered = true
+    }
+    else {
+      currentStatus = "Order Placed on ( " +
+        orderPlacedData[0].placedDate +
+        " ) ---> Cancelled on ( " +
+        orderPlacedData[0].CancelDate +
+        " )"
     }
 
     // let returnAvailable = true
     if (orderPlacedData[0].paymentStatus == "Delivered") {
       isDelivered = true
     }
-    
-    let returnStatus = await ReturnRequest.find({orderId:req.query.id})
-    
+
+    let returnStatus = await ReturnRequest.find({ orderId: req.query.id })
+
     res.render("user/customer-order-detail", {
       data: orderPlacedData[0],
       cancelled: cancelled,
       status: currentStatus,
-      isDelivered:isDelivered,
-      returnStatus:returnStatus,
-      header:headerData
-     
+      isDelivered: isDelivered,
+      returnStatus: returnStatus,
+      header: headerData
+
     });
   } catch (error) {
     console.log(error);
@@ -1083,11 +1094,33 @@ const cancelOrder = async (req, res) => {
       { _id: new ObjectId(req.query.id) },
       { $set: { paymentStatus: "Cancelled", cancelDate: Date.now() } }
     );
+    console.log(orderPlacedData)
+    for (var i = 0; i < orderPlacedData.cart.products.length; i++) {
+      console.log(orderPlacedData.cart.products[i].product_id)
+      var addStockInCart = await Product.updateOne(
+        { _id: new ObjectId(orderPlacedData.cart.products[i].product_id) },
+        { $inc: { quantity: orderPlacedData.cart.products[i].quantity } }
+      );
+    }
+
     if (
       orderPlacedData.paymentMode == "CARD" &&
       orderPlacedData.paymentStatus != "Cancelled"
     ) {
       initiateRefund(orderPlacedData.paymentId, orderPlacedData.totalAmount);
+    }
+    if (orderPlacedData.paymentMode == "WALLET") {
+      var wallet = await Wallet.findOne({ user: orderPlacedData.cart.email, });
+      console.log( "Total total total");
+      wallet.totalAmount += parseInt(orderPlacedData.cart.totalAmount);
+      var dataWallet = await Wallet.updateOne({ user: orderPlacedData.cart.email },
+        { $set: { totalAmount: wallet.totalAmount } });
+      var walletHistory = {
+        user: orderPlacedData.cart.email,
+        totalAmount: parseInt(orderPlacedData.cart.totalAmount),
+        spent: false
+      }
+      var walletHistory = await WalletHistory.create(walletHistory)
     }
     res.render("user/cancel-order");
   } catch (error) {
@@ -1493,39 +1526,39 @@ const userWallet = async (req, res) => {
 
 const yourWallet = async (req, res) => {
   try {
-    var walletHistory = await WalletHistory.find({ user: req.session.email })
+    var walletHistory = await WalletHistory.find({ user: req.session.email }).sort({"_id":-1});
     const headerData = await nestedHeaderData();
-    res.render("user/customer-wallet", { walletHistory:walletHistory,header:headerData });
+    res.render("user/customer-wallet", { walletHistory: walletHistory, header: headerData });
   } catch (error) {
     console.log(error.message);
   }
 }
 
-const returnRequest = async(req,res) =>{
-try{
-  let data = {
-    email:req.session.email,
-    status:"Return Requested",
-    orderId:req.query.id
-  }
-  let returnAmount = await ReturnRequest.create(data)
-  res.redirect('orderDetails?id='+req.query.id)
+const returnRequest = async (req, res) => {
+  try {
+    let data = {
+      email: req.session.email,
+      status: "Return Requested",
+      orderId: req.query.id
+    }
+    let returnAmount = await ReturnRequest.create(data)
+    res.redirect('orderDetails?id=' + req.query.id)
 
-}catch(error){
-  console.log(error);
-  res.render("user/error");
-}
+  } catch (error) {
+    console.log(error);
+    res.render("user/error");
+  }
 }
 
 const checkBlockedUser = async (req, res, next) => {
-  let isUserBlocked = await User.findOne({email:req.session.email})
+  let isUserBlocked = await User.findOne({ email: req.session.email })
   console.log(isUserBlocked);
-  if(isUserBlocked!=null){
-  if(isUserBlocked.isBlocked){
-    return res.redirect('logout')
+  if (isUserBlocked != null) {
+    if (isUserBlocked.isBlocked) {
+      return res.redirect('logout')
+    }
   }
-  }
- 
+
   // User is not blocked, move to the next middleware or route handler
   next();
 }

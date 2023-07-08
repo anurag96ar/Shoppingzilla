@@ -217,7 +217,9 @@ const getAllProduct = asyncHandler(
           });
         });
       });
-      console.log(nestedData);
+      if(search==undefined){
+        search=""
+        }
       var isLoggedIn = await isUserLoggedIn(req.cookies.email);
       var cartCount = await addToCart.count({email:req.cookies.email});
       // res.json(product);
@@ -226,7 +228,7 @@ const getAllProduct = asyncHandler(
         header: nestedData,
         category: type,
         isLoggedIn: isLoggedIn,
-        
+        search:search,
         cartCount,
         id,
         categoryId,

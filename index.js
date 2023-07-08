@@ -25,6 +25,8 @@ const Product = require("./models/productModel");
 const addToCart = require("./models/addToCart");
 const session = require('express-session')
 const { ObjectId } = require('mongodb');
+const fs = require('fs')
+const sharp = require('sharp')
 
 
 connectDB();
@@ -176,7 +178,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.post('/uploadProduct', upload.array('files', 5), (req, res) => {
+const sharpImage = (req, res, next) => {
+  req.files.forEach((file) => {
+    const inputBuffer = fs.readFileSync(file.path);
+    sharp(inputBuffer)
+      .resize({ width: 350, height: 450, fit: "fill" })
+      .toFile(file.path, (err) => {
+        if (err) throw err;
+      });
+  });
+
+  next();
+};
+
+
+app.post('/uploadProduct', upload.array('files', 5),sharpImage, (req, res) => {
 
   // Access the form fields via req.body and the uploaded files via req.files array
   const title = req.body.title;

@@ -127,15 +127,20 @@
                         </div>
                       </div>
                     </div>
+                    {{#if_equal wallet.length 0}}
+                   
+                    {{else}}
                     <div class="col-md-6">
                       <div class="box payment-method">
-                        <h4>Wallet</h4>
+                        <h4>Wallet  </h4>
+                        Balance ₹ <b>{{wallet.[0].totalAmount}}</b>
                         <p>Pay using e-Money</p>
                         <div class="box-footer text-center">
                           <input type="radio" name="payment" value="WALLET">
                         </div>
                       </div>
                     </div>
+                    {{/if_equal}}
                   </div>
                   <!-- /.row-->
                 </div>

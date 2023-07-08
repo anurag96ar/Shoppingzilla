@@ -207,6 +207,15 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
+            <form action="category?type=All&search=true" method="get" >
+              <div class="input-group">
+                <input type="text" placeholder="Search" class="form-control" name="search">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+            <br>
             <!-- breadcrumb-->
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
@@ -332,6 +341,11 @@
             <div class="box row justify-content-between">
               <div>
                 <h1 id="category">{{category}}</h1>
+                {{#if_equal search ""}}
+                {{else}}
+                 <h2>Search Result for "<i>{{search}}</i>"</h2>
+                 
+                 {{/if_equal}}
                 <p>In our {{category}} department we offer wide selection of the best products we have found and
                   carefully
                   selected worldwide.</p>

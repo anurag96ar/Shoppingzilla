@@ -824,6 +824,7 @@ const dayWiseReport = async (req, res) => {
     var reportDate = req.body.reportDate;
     var reportMonth = req.body.reportMonth;
     var reportYear = req.body.reportYear;
+    var endDate = req.body.endDate
     const currentDate = new Date();
 const formattedDate = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
     console.log(reportDate);
@@ -832,10 +833,11 @@ const formattedDate = currentDate.toLocaleDateString('en-US', { year: 'numeric',
 
     if (reportDate != undefined && reportDate != "") {
       const targetDate = new Date(reportDate);
+      const endDateFinal = new Date(endDate)
       orderPlacedData = await Order.find({
         placedDate: {
           $gte: targetDate,
-          $lt: new Date(targetDate.getTime() + 24 * 60 * 60 * 1000), // Add one day to the target date
+          $lt: endDateFinal  // Add one day to the target date
         },
       });
     }
@@ -957,6 +959,13 @@ const rejectApproved = async(req,res)=>{
       { $set: { paymentStatus: req.query.status, returnDate: Date.now() } }
     );
     console.log(changeStatus +"   status has been changed");
+    for (var i = 0; i < changeStatus.cart.products.length; i++) {
+      console.log(changeStatus.cart.products[i].product_id)
+      var addStockInCart = await Product.updateOne(
+        { _id: new ObjectId(changeStatus.cart.products[i].product_id) },
+        { $inc: { quantity: changeStatus.cart.products[i].quantity } }
+      );
+    }
 let updateStatus = await ReturnRequest.findOneAndUpdate({ orderId: req.query.id },
   { $set: { status: req.query.status } })
     if (changeStatus.paymentMode == "CARD") {

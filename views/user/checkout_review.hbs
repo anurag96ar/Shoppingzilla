@@ -40,26 +40,45 @@
   <script>
     $(document).on("click", "#applyCoupon", function () {
 
-    
+
       var dataTotalAmount = {{ cart.totalAmount }} 
       var discount = $(this).parents("tr").find('td').eq(1).html().trim();
-        var couponName = $(this).parents("tr").find('td').eq(0).html().trim();
+    var couponName = $(this).parents("tr").find('td').eq(0).html().trim();
     var newAmount = parseInt(dataTotalAmount) - (parseInt(dataTotalAmount) * parseInt(discount) / 100);
 
     var finalAmount = document.getElementById('finalAmount');
     finalAmount.textContent = newAmount.toString();
     var couponDiscount = document.getElementById('couponDiscount');
     couponDiscount.textContent = couponName;
-    $(this).parents("tr").remove();
- swal({
-    title: "Coupon Applied!",
-    text: "Your discount has been applied successfully.",
-    icon: "success",
-    button: "OK",
-  });
+
+  //  $(this).parents("tr").remove();
+    
+    swal({
+      title: "Coupon Applied!",
+      text: "Your discount has been applied successfully.",
+      icon: "success",
+      button: "OK",
     });
+    const removeCouponBtn = document.querySelectorAll('#removeCoupon');
 
+    removeCouponBtn.forEach(td => {
+      td.style.visibility = "hidden";
 
+    });
+    const apply = document.querySelectorAll("#applyCoupon");
+    apply.forEach(td => {
+      td.style.visibility = "visible";
+
+    });
+     $(this).parents("tr").find('td').eq(3).css("visibility", "hidden");
+    $(this).parents("tr").find('td').eq(4).css("visibility", "visible");
+    });
+    ////
+
+    $(document).on("click", "#removeCoupon", function () {
+      location.reload()
+    });
+    /////
     $(document).on("click", ".PlaceOrder", function () {
 
       debugger;
@@ -67,7 +86,7 @@
       var address = $('#addressId').text();
       var finalAmount = document.getElementById('finalAmount');
       var couponDiscount = document.getElementById('couponDiscount');
-      var data = { mode: cod, address: address, finalAmount: finalAmount.innerHTML ,couponDiscount:couponDiscount.innerHTML};
+      var data = { mode: cod, address: address, finalAmount: finalAmount.innerHTML, couponDiscount: couponDiscount.innerHTML };
 
       $.ajax({
         url: 'placeAnOrder',
@@ -240,7 +259,7 @@
               <h1>Checkout - Order review</h1>
               <div class="nav flex-column flex-sm-row nav-pills"><a href="checkout"
                   class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-map-marker"> </i>Address</a>
-                <a  class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-money">
+                <a class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-money">
                   </i>Payment Method</a><a href="#" class="nav-link flex-sm-fill text-sm-center active"> <i
                     class="fa fa-eye"> </i>Order Review</a>
               </div>
@@ -290,7 +309,7 @@
                         <th>Discount</th>
                         <th>Max Amount</th>
 
-                        <th>Action</th>
+                        <th colspan="2">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -303,6 +322,7 @@
                         <td>{{amount}}</td>
 
                         <td style="color: green;" id="applyCoupon">Apply</td>
+                        <td style="color: red;visibility:hidden" id="removeCoupon">Remove</td>
                         {{!-- <td><a class="delete"><i class="fa fa-trash-o "></i></a></td> --}}
                       </tr>
 

@@ -113,12 +113,13 @@
                       <div align="end">
                         <a href="editAddress?addressId={{this._id}}"> <label class="badge badge-warning">Edit
                             Address</label></a>
-                              <a href="deleteAddress?addressId={{this._id}}" onclick="return confirmDelete()"> <label class="badge badge-danger">Delete Address
-                            </label></a>
+                        <a href="deleteAddress?addressId={{this._id}}" onclick="return confirmDelete()"> <label
+                            class="badge badge-danger">Delete Address
+                          </label></a>
                       </div>
-                       
-                    
-        
+
+
+
                       <h4>{{receiverName}}</h4>
                       <p>{{completeAddress}}
                       </p>
@@ -136,8 +137,12 @@
                 </div>
                 <div class="box-footer d-flex justify-content-between">
                   <a href="cart" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i>Back to Basket</a>
+                  {{#if_equal address.length 0}}
+                     {{else}}
                   <button type="submit" class="btn btn-primary">Continue to Payment Method<i
                       class="fa fa-chevron-right"></i></button>
+               
+                  {{/if_equal}}
                 </div>
               </form>
             </div>
@@ -180,9 +185,10 @@
           </form>
           <hr>
           <h4 class="mb-3">Stay in touch</h4>
-          <p class="social"><a href="https://www.facebook.com/anurag.ar.908?mibextid=ZbWKwL" class="facebook external"><i class="fa fa-facebook"></i></a><a href="#"
-              class="twitter external"><i class="fa fa-twitter"></i></a><a href="https://www.instagram.com/anurag96ar/" class="instagram external"><i
-                class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
+          <p class="social"><a href="https://www.facebook.com/anurag.ar.908?mibextid=ZbWKwL"
+              class="facebook external"><i class="fa fa-facebook"></i></a><a href="#" class="twitter external"><i
+                class="fa fa-twitter"></i></a><a href="https://www.instagram.com/anurag96ar/"
+              class="instagram external"><i class="fa fa-instagram"></i></a><a href="#" class="gplus external"><i
                 class="fa fa-google-plus"></i></a><a href="#" class="email external"><i class="fa fa-envelope"></i></a>
           </p>
         </div>
@@ -200,14 +206,14 @@
     *** COPYRIGHT ***
     _________________________________________________________
     -->
-  
+
   <!-- *** COPYRIGHT END ***-->
   <!-- JavaScript files-->
   <script>
-  function confirmDelete() {
-    return confirm("Are you sure you want to delete this Address?");
-  }
-</script>
+    function confirmDelete() {
+      return confirm("Are you sure you want to delete this Address?");
+    }
+  </script>
   <script src="/userHome/vendor/jquery/jquery.min.js"></script>
   <script src="/userHome/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/userHome/vendor/jquery.cookie/jquery.cookie.js"> </script>
