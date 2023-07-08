@@ -383,7 +383,10 @@ app.post('/createSubCategoryAPI', async (req, res) => {
 
 });
 
+app.get('/', (req, res) => {
 
+  res.redirect('api/user/homepage');
+});
 
 app.use(notFound)
 app.use(errorHandler)
