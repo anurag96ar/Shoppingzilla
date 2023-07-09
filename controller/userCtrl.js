@@ -90,7 +90,10 @@ const createUser = asyncHandler(async (req, res) => {
     res.redirect("otp?email=" + email);
     // res.json(newUser)
   } else {
-    throw new Error("User Already Exists");
+    notifier.notify({
+      title: 'Error',
+      message: 'User Already Exists',
+    });
   }
 });
 
